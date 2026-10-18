@@ -44,22 +44,23 @@ No accounts. No servers. No tracking. Everything runs in your browser.
 
 | | |
 |---|---|
-| 🔑 **Ignition** | The first tab after Chrome starts is a Porsche cockpit. Your pointer becomes a key: insert it, enter your PIN (demo `1234`), and the real engine fires while the tachometer sweeps. The mouse steers the wheel. |
+| 🏁 **Start screen** | The first tab after Chrome starts says **Let's Drive the Full Chrome**. Start the engine (real recording) and roll in, or press **Start & drive** to take the wheel right away. |
 | 🎬 **Live new tab** | Drift videos with smoke rolling across the page, or 13 sports-car photos (Lamborghini, Ferrari, McLaren, Porsche, Audi), with a clock, search and your top sites. |
 | 🏎️ **Page car** | A real Ferrari laps every website's edges like a stunt track and drifts through the corners. Or set it to follow your active tab. |
 | 🎮 **Game mode** | Drive the car anywhere on any page: WASD, Space for nitro, Shift to drift. Includes a speedometer and nitro bar, and the page scrolls when you drive into the edge. |
 | ⚡ **Quick menu** | Click the car for 26 actions: screenshot, reload, zoom, full screen, mini player, read aloud, dark page, high contrast, translate, copy link, print, mute, pin and more. |
 | 🎨 **Paint shop** | Repaint the car any color or gradient (Gulf, Sunset, Galaxy…), keeping its real reflections. |
-| 🌈 **Accent colors** | Any color or gradient for Car Mode's buttons, new tab, ignition screen and steering wheel. |
+| 🌈 **Accent colors** | Any color or gradient for Car Mode's buttons, new tab and start screen. |
 | 🧩 **Chrome theme + builder** | A carbon tab bar with a clearly highlighted active tab, plus a builder that makes your own theme with a live preview. |
 | 🔊 **Real sounds** | Engine start, a nitro burst for new tabs, a car driving away when you close a tab. Pick your own sound for every event. |
 | 📖 **User guide** | Opens on first install and explains everything with screenshots. It can be saved as a PDF. |
+| 👀 **Side or top view** | Pick the side-view Ferrari or a real top-down Honda S2000. In game mode the page scrolls with the car as you drive. |
 
 ## Screenshots
 
 <table>
   <tr>
-    <td width="50%"><img src="guide/img/ignition.jpg" alt="Ignition cockpit with PIN pad"><br><sub><b>Ignition</b>: key, PIN and engine start</sub></td>
+    <td width="50%"><img src="guide/img/start.jpg" alt="Start screen: Let's Drive the Full Chrome"><br><sub><b>Start screen</b>: Let's Drive the Full Chrome</sub></td>
     <td width="50%"><img src="guide/img/newtab.jpg" alt="New tab with drift video"><br><sub><b>New tab</b>: drift video wallpaper with smoke</sub></td>
   </tr>
   <tr>
@@ -135,8 +136,9 @@ Car Mode collects **no data**. It has no accounts, no analytics and no network r
 | Permission | Why |
 |---|---|
 | Read & change site data (`<all_urls>`) | Show the car and smoke on websites; take screenshots of the current page |
-| `storage` | Save your settings, paint and PIN locally |
+| `storage` | Save your settings and paint locally |
 | `downloads` | Save screenshots and theme-builder themes to your Downloads folder |
+| `scripting` | Put the car on tabs that were already open when Car Mode was installed or updated |
 | `offscreen` | Play engine sounds in the background so they work across tabs |
 | `sidePanel` | The Car Mode controls |
 | `topSites`, `favicon`, `search` | Most-visited shortcuts and the search box on the new tab |
@@ -152,11 +154,11 @@ manifest.json         Manifest V3
 background.js         engine sounds for browser events, quick-menu actions, tab positions
 offscreen/            hidden audio page
 content/car.js        page car: roaming, follow-tab, game mode, smoke and quick menu
-newtab/               new tab (wallpapers, smoke) and ignition screen
+newtab/               new tab (wallpapers, smoke) and start screen
 sidepanel/            control center (wallpaper, car & paint, colors & theme builder, sound, more)
 guide/                user guide (opens on install) and its screenshots
 shared/               settings, sound clips, audio player, smoke renderer, colors/paint/theme generator
-assets/               photos, videos, cockpit, car cutout, recordings, smoke textures, icons
+assets/               photos, videos, car cutouts (side + top view), recordings, smoke textures, icons
 theme/                the Chrome theme (a separate extension)
 docs/                 README images
 scripts/package.py    builds the release ZIPs
@@ -178,7 +180,7 @@ python scripts/package.py   # → dist/car-mode.zip and dist/car-mode-theme.zip
 
 - **Photos, videos and engine recordings:** [Wikimedia Commons](https://commons.wikimedia.org/) contributors under free licenses (CC BY, CC BY-SA, CC0, public domain). Every file, author and license is listed in **[CREDITS.md](CREDITS.md)** and in the extension (**Controls › More › Credits**).
 - **Icons:** [Tabler Icons](https://tabler.io/icons) (MIT).
-- **Smoke textures, carbon texture, steering wheel and gauges:** made for this project.
+- **Smoke and carbon textures:** made for this project.
 - **Code:** [MIT License](LICENSE).
 
 <p align="center"><sub>Made with ❤️ for car people. Drive safe.</sub></p>

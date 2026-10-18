@@ -5,10 +5,9 @@
   const { CLIPS, EVENTS } = CAR;
   const P = CarPaint;
 
-  const [items, sounds, cockpit, carCredit] = await Promise.all([
+  const [items, sounds, carCredit] = await Promise.all([
     CAR.wallpapers('../'),
     fetch('../assets/sounds/credits.json').then(r => r.json()),
-    fetch('../assets/cockpit/credits.json').then(r => r.json()),
     fetch('../assets/car/credits.json').then(r => r.json())
   ]);
   let s = await CAR.load();
@@ -66,7 +65,11 @@
   $('carSpeed').addEventListener('change', async () => { s = await CAR.save({ carSpeed: Number($('carSpeed').value) }); });
 
   // ---------- Paint shop ----------
-  const CAR_SRC = '../assets/car/ferrari-side-480.png';
+  // Each view has its own car photo and paint mask; paint is applied to both so switching views keeps it.
+  const CARS = {
+    side: { src: '../assets/car/ferrari-side-480.png', mask: 'red', key: 'carImage' },
+    top: { src: '../assets/car/s2000-top-480.png', mask: 'silver', key: 'carImageTop' }
+  };
   const PAINTS = [
     ['Rosso', 'solid', '#d40000'], ['Giallo', 'solid', '#ffcc00'], ['Lambo green', 'solid', '#5ad400'], ['Racing green', 'solid', '#0b5d3b'],
     ['Electric blue', 'solid', '#1f5fff'], ['Nardo grey', 'solid', '#7d8186'], ['Pearl white', 'solid', '#e9e9ec'], ['Matte black', 'solid', '#1d1d20'],
@@ -77,16 +80,27 @@
 
   let paintTimer = 0;
   async function applyPaint(paint, save = true) {
-    const blob = await P.paintCar(CAR_SRC, paint, 480);
+    const view = CARS[s.carView] || CARS.side;
+    const blob = await P.paintCar(view.src, paint, 480, view.mask);
     $('paintPreview').src = URL.createObjectURL(blob);
     if (!save) return;
     clearTimeout(paintTimer);
     paintTimer = setTimeout(async () => {
       s = await CAR.save({ carPaint: paint });
-      if (paint.type === 'original') await chrome.storage.local.remove('carImage');
-      else await chrome.storage.local.set({ carImage: await P.blobToDataUrl(await P.paintCar(CAR_SRC, paint, 240)) });
+      if (paint.type === 'original') return chrome.storage.local.remove(['carImage', 'carImageTop']);
+      const out = {};
+      for (const c of Object.values(CARS)) out[c.key] = await P.blobToDataUrl(await P.paintCar(c.src, paint, 240, c.mask));
+      await chrome.storage.local.set(out);
     }, 150);
   }
+
+  $('carView').addEventListener('click', async e => {
+    const b = e.target.closest('[data-v]');
+    if (!b) return;
+    s = await CAR.save({ carView: b.dataset.v });
+    render();
+    applyPaint(s.carPaint, false);
+  });
 
   $('paintSwatches').addEventListener('click', e => {
     const b = e.target.closest('[data-p]');
@@ -209,17 +223,10 @@
   });
   $('showTheme').addEventListener('click', () => lastDownload ? chrome.downloads.show(lastDownload) : chrome.downloads.showDefaultFolder());
 
-  // ---------- Ignition ----------
-  $('pinForm').addEventListener('submit', async e => {
-    e.preventDefault();
-    const v = $('pin').value.trim();
-    if (!/^\d{4}$/.test(v)) return toast('PIN must be 4 digits');
-    s = await CAR.save({ pin: v });
-    toast('PIN saved');
-  });
+  // ---------- Start screen ----------
   $('replay').addEventListener('click', async () => {
-    await chrome.storage.session.remove('ignited');
-    chrome.tabs.create({ url: chrome.runtime.getURL('newtab/newtab.html#ignition') });
+    await chrome.storage.session.remove('started');
+    chrome.tabs.create({ url: chrome.runtime.getURL('newtab/newtab.html#start') });
   });
 
   // ---------- Sounds ----------
@@ -243,7 +250,7 @@
     if (b) CarPlayer.play(s.sounds[b.dataset.preview], s.volume);
   });
 
-  for (const id of ['shuffle', 'entrance', 'sound', 'topCar', 'ignition']) {
+  for (const id of ['shuffle', 'entrance', 'sound', 'topCar', 'startScreen']) {
     $(id).addEventListener('change', async () => { s = await CAR.save({ [id]: $(id).checked }); });
   }
   $('volume').addEventListener('change', async () => {
@@ -260,20 +267,20 @@
   // ---------- Credits ----------
   const credit = c => `<p><b>${esc(c.name || c.title)}</b> — ${esc(c.author)}, <a href="${esc(c.licenseUrl || c.source)}" target="_blank" rel="noopener">${esc(c.license)}</a>, <a href="${esc(c.source)}" target="_blank" rel="noopener">source</a></p>`;
   $('credits').innerHTML = `<p>Photos, videos and recordings from Wikimedia Commons, used under their licenses:</p>
-    ${[...items, ...cockpit, ...carCredit, ...sounds].map(credit).join('')}
+    ${[...items, ...carCredit, ...sounds].map(credit).join('')}
     <p>Icons: <a href="https://tabler.io/icons" target="_blank" rel="noopener">Tabler Icons</a> (MIT). Smoke textures are generated. Car Mode code is MIT licensed.</p>`;
 
   function render() {
     P.applyAccent(document.documentElement, s.accent);
     renderCars();
     renderEvents();
-    for (const id of ['shuffle', 'entrance', 'sound', 'topCar', 'ignition']) $(id).checked = !!s[id];
+    for (const id of ['shuffle', 'entrance', 'sound', 'topCar', 'startScreen']) $(id).checked = !!s[id];
     $('volume').value = s.volume;
     $('idle').value = s.idle;
     $('carSpeed').value = s.carSpeed;
-    if (document.activeElement !== $('pin')) $('pin').value = s.pin;
     [...$('smoke').children].forEach(b => b.classList.toggle('on', b.dataset.v === s.smoke));
     [...$('carMode').children].forEach(b => b.classList.toggle('on', b.dataset.v === s.carMode));
+    [...$('carView').children].forEach(b => b.classList.toggle('on', b.dataset.v === s.carView));
     $('accentGradient').checked = !!s.accent.gradient;
     $('accent1').value = s.accent.c1;
     $('accent2').value = s.accent.c2;

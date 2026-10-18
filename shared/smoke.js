@@ -1,11 +1,15 @@
 // Tire-smoke renderer: layered, rotating, growing puffs drawn from noise textures (assets/fx/smoke-*.png).
 // Runs only while there is smoke on screen, so an idle page costs nothing.
 (function (root) {
-  const SPRITES = [0, 1, 2, 3].map(i => {
-    const img = new Image();
-    img.src = chrome.runtime.getURL(`assets/fx/smoke-${i}.png`);
-    return img;
-  });
+  // Pages (content scripts) pass data URLs via Smoke.useSprites, because some sites block
+  // chrome-extension:// loads; extension pages fall back to the packaged files.
+  const SPRITES = [0, 1, 2, 3].map(() => new Image());
+  let spritesSet = false;
+  function ensureSprites() {
+    if (spritesSet) return;
+    spritesSet = true;
+    SPRITES.forEach((img, i) => { img.src = chrome.runtime.getURL(`assets/fx/smoke-${i}.png`); });
+  }
   const rand = (a, b) => a + Math.random() * (b - a);
 
   class Smoke {
@@ -31,6 +35,7 @@
 
     // One puff. Sizes in px, velocities in px/s, life in s.
     puff(x, y, { vx = 0, vy = 0, size = 40, grow = 60, life = 1.6, alpha = 0.5 } = {}) {
+      ensureSprites();
       if (this.parts.length >= this.max) this.parts.shift();
       this.parts.push({
         x, y, vx: vx + rand(-12, 12), vy: vy + rand(-10, 6), size: size * rand(0.8, 1.2), grow: grow * rand(0.7, 1.3),
@@ -84,7 +89,7 @@
         ctx.save();
         ctx.translate(p.x, p.y);
         ctx.rotate(p.rot);
-        ctx.drawImage(p.img, -s / 2, -s / 2, s, s);
+        if (p.img.complete && p.img.naturalWidth) ctx.drawImage(p.img, -s / 2, -s / 2, s, s);
         ctx.restore();
       }
       ctx.globalAlpha = 1;
@@ -93,6 +98,11 @@
       else this.running = false;
     }
   }
+
+  Smoke.useSprites = srcs => {
+    spritesSet = true;
+    srcs.forEach((src, i) => { if (SPRITES[i]) SPRITES[i].src = src; });
+  };
 
   root.CarSmoke = Smoke;
 })(typeof self !== 'undefined' ? self : this);

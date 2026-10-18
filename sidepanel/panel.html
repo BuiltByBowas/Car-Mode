@@ -41,6 +41,7 @@
   <div class="view" data-view="car">
     <section class="card">
       <h2><span class="i i-brush"></span>Paint shop</h2>
+      <div class="seg wide" id="carView"><button data-v="side">Side view · Ferrari</button><button data-v="top">Top view · S2000</button></div>
       <div class="showroom"><img id="paintPreview" alt="Your car with the selected paint"></div>
       <div class="seg wide" id="paintType"><button data-v="original">Original</button><button data-v="solid">Solid</button><button data-v="gradient">Gradient</button></div>
       <div class="swatches" id="paintSwatches"></div>
@@ -65,7 +66,7 @@
   <div class="view" data-view="colors">
     <section class="card">
       <h2><span class="i i-palette"></span>Accent color</h2>
-      <p class="note">Highlights in Car Mode: buttons, switches, the new tab and the ignition screen.</p>
+      <p class="note">Highlights in Car Mode: buttons, switches, the new tab and the start screen.</p>
       <div class="swatches" id="accentSwatches"></div>
       <label class="row switch"><span>Gradient</span><input type="checkbox" id="accentGradient"></label>
       <div class="pickers">
@@ -114,14 +115,9 @@
   <!-- MORE -->
   <div class="view" data-view="more">
     <section class="card">
-      <h2><span class="i i-key"></span>Ignition</h2>
-      <label class="row switch"><span>Key &amp; PIN when Chrome starts</span><input type="checkbox" id="ignition"></label>
-      <form class="row" id="pinForm">
-        <span>PIN</span>
-        <span class="pin-edit"><input id="pin" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="off" aria-label="4-digit PIN"><button class="small" type="submit">Save</button></span>
-      </form>
-      <p class="note">A fun lock for the start screen, not real security. Demo PIN is 1234.</p>
-      <button class="btn" id="replay"><span class="i i-power"></span>Start the engine again</button>
+      <h2><span class="i i-power"></span>Start screen</h2>
+      <label class="row switch"><span>"Let's Drive" when Chrome starts</span><input type="checkbox" id="startScreen"></label>
+      <button class="btn" id="replay"><span class="i i-power"></span>Show the start screen now</button>
     </section>
     <section class="card">
       <h2><span class="i i-info"></span>Help</h2>

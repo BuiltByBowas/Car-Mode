@@ -8,11 +8,22 @@
   window.__carModeCar = true;
 
   let s = await CAR.load();
-  const url = p => chrome.runtime.getURL(p);
+  // Every image the car needs, as data URLs from the background (some sites block chrome-extension:// loads).
+  const ICONS = ['x', 'steering-wheel', 'book', 'camera', 'refresh', 'arrow-left', 'arrow-right', 'plus', 'copy', 'volume', 'pin',
+    'zoom-in', 'zoom-out', 'zoom-reset', 'maximize', 'arrow-bar-to-up', 'arrow-bar-to-down', 'picture-in-picture', 'headphones',
+    'contrast', 'moon', 'link', 'language', 'printer', 'speakerphone', 'parking'];
+  const SMOKE = [0, 1, 2, 3].map(i => `assets/fx/smoke-${i}.png`);
+  const PATHS = ['assets/car/ferrari-side-240.png', 'assets/car/s2000-top-240.png', ...SMOKE, ...ICONS.map(n => `assets/icons/${n}.svg`)];
+  const assets = (await chrome.runtime.sendMessage({ type: 'car-assets', paths: PATHS }).catch(() => null)) || {};
+  const url = p => assets[p] || chrome.runtime.getURL(p);
+  CarSmoke.useSprites(SMOKE.map(url));
   const sleep = ms => new Promise(r => setTimeout(r, ms));
 
+  // After an extension update, the previous copy of this script is orphaned; remove its car first.
+  document.querySelectorAll('[data-carmode-host]').forEach(el => el.remove());
   const host = document.createElement('div');
-  host.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:2147483646;contain:strict;';
+  host.dataset.carmodeHost = '';
+  host.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:2147483647;contain:strict;';
   const shadow = host.attachShadow({ mode: 'closed' });
   const ic = name => `<span class="ic" style="--src:url('${url(`assets/icons/${name}.svg`)}')"></span>`;
   shadow.innerHTML = `
@@ -20,6 +31,7 @@
       :host { all: initial; }
       * { box-sizing: border-box; }
       canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; }
+      .car.top { width: 72px; }
       .car { position: fixed; left: 0; top: 0; width: 84px; height: auto; transform-origin: 0 0; pointer-events: auto; cursor: pointer;
         filter: drop-shadow(0 3px 3px rgba(0,0,0,.45)); will-change: transform; transition: opacity .35s; outline: none; }
       .car:focus-visible { filter: drop-shadow(0 0 0 #fff) drop-shadow(0 0 4px #e10600); }
@@ -59,16 +71,24 @@
     <div class="toast" role="status"></div>`;
   const car = shadow.querySelector('.car');
   // The paint shop stores the repainted car as a small image; use it when present.
-  const setCarImage = src => {
-    const fallback = url('assets/car/ferrari-side-240.png');
-    car.src = src || fallback;
-    shadow.querySelector('.head img').src = src || fallback;
+  // Side view = the Ferrari; top view = the S2000 seen from above. Both can be repainted.
+  const isTop = () => s.carView === 'top';
+  let painted = {};
+  const setCarImage = () => {
+    const top = isTop();
+    const src = (top ? painted.carImageTop : painted.carImage) || url(top ? 'assets/car/s2000-top-240.png' : 'assets/car/ferrari-side-240.png');
+    car.src = src;
+    car.classList.toggle('top', top);
+    shadow.querySelector('.head img').src = src;
   };
-  chrome.storage.local.get('carImage').then(r => setCarImage(r.carImage));
+  chrome.storage.local.get(['carImage', 'carImageTop']).then(r => { painted = r; setCarImage(); });
   const menu = shadow.querySelector('.menu');
   const toastEl = shadow.querySelector('.toast');
   const smoke = new CarSmoke(shadow.querySelector('canvas'), { max: 200 });
-  (document.body || document.documentElement).appendChild(host);
+  const mount = () => { if (!host.isConnected) document.documentElement.appendChild(host); };
+  mount();
+  const keeper = new MutationObserver(mount);
+  keeper.observe(document.documentElement, { childList: true });
 
   // Darker smoke on light pages so it stays visible.
   const bg = getComputedStyle(document.body || document.documentElement).backgroundColor.match(/\d+/g);
@@ -92,7 +112,7 @@
     const { w, h } = size();
     car.style.transform = `translate(${x}px, ${y}px) rotate(${phi + yaw}rad) translate(${-w / 2}px, ${-h}px)`;
     const rx = -w / 2 + 3;
-    const ry = -h * 0.3;
+    const ry = isTop() ? -h / 2 : -h * 0.3;
     const a = phi + yaw;
     return { x: x + rx * Math.cos(a) - ry * Math.sin(a), y: y + rx * Math.sin(a) + ry * Math.cos(a), dx: Math.cos(a), dy: Math.sin(a) };
   }
@@ -267,6 +287,7 @@
   function startGame() {
     if (gaming) return;
     gaming = true;
+    scroller = null;
     closeMenu();
     cancelAnimationFrame(roamRaf);
     cancelAnimationFrame(tabRaf);
@@ -342,20 +363,17 @@
     // side walls stop the sideways motion but let the car slide along them
     if (g.x < m) { g.x = m; g.vx = Math.max(0, g.vx); }
     if (g.x > innerWidth - m) { g.x = innerWidth - m; g.vx = Math.min(0, g.vx); }
-    const edge = 60;
-    if (g.y > innerHeight - edge && g.vy > 0) {
-      const before = scrollY;
-      scrollBy(0, g.vy * dt);
-      if (scrollY === before) { g.y = Math.min(g.y, innerHeight - m); if (g.y >= innerHeight - m) g.vy = -Math.abs(g.vy) * 0.35; } else g.y = innerHeight - edge;
-    }
-    if (g.y < edge && g.vy < 0) {
-      const before = scrollY;
-      scrollBy(0, g.vy * dt);
-      if (scrollY === before) { g.y = Math.max(g.y, m); if (g.y <= m) g.vy = Math.abs(g.vy) * 0.35; } else g.y = edge;
-    }
+    // camera follow: keep the car in the middle band of the screen by scrolling the page with it
+    const bandTop = innerHeight * 0.32;
+    const bandBottom = innerHeight * 0.68;
+    if (g.y > bandBottom && g.vy > 0) g.y -= scrollPage(g.y - bandBottom);
+    if (g.y < bandTop && g.vy < 0) g.y -= scrollPage(g.y - bandTop);
+    // at the very top/bottom of the page the car can drive on to the screen edge
+    if (g.y > innerHeight - m) { g.y = innerHeight - m; g.vy = Math.min(0, g.vy); }
+    if (g.y < m) { g.y = m; g.vy = Math.max(0, g.vy); }
 
-    // draw: rotate to the heading; flip when facing left so the wheels stay down
-    const flip = Math.cos(g.h) < 0 ? ' scaleY(-1)' : '';
+    // draw: rotate to the heading; the side view flips when facing left so its wheels stay down
+    const flip = !isTop() && Math.cos(g.h) < 0 ? ' scaleY(-1)' : '';
     car.style.transform = `translate(${g.x}px, ${g.y}px) rotate(${g.h}rad)${flip} translate(${-w / 2}px, ${-h / 2}px)`;
 
     // smoke: tire smoke when sliding, exhaust when boosting
@@ -369,6 +387,28 @@
     }
     hudSpeed.textContent = Math.round(Math.abs(v) * 0.36);
     hudNitro.style.width = `${Math.round(g.nitro * 100)}%`;
+  }
+  // Scroll whatever actually scrolls here: the window, or (on app-like sites) the panel under the car.
+  // Returns how far it moved, so the car can stay put on screen while the page slides under it.
+  let scroller = null;
+  function scrollPage(dy) {
+    const target = scroller && scroller.isConnected ? scroller : null;
+    if (!target) {
+      const before = scrollY;
+      scrollBy(0, dy);
+      if (scrollY !== before) return scrollY - before;
+      // look under the car, skipping Car Mode's own overlay
+      let el = document.elementsFromPoint(g.x, g.y).find(e => e !== host && e !== document.documentElement);
+      while (el && el !== document.documentElement) {
+        const st = getComputedStyle(el);
+        if (/(auto|scroll)/.test(st.overflowY) && el.scrollHeight > el.clientHeight + 4) { scroller = el; break; }
+        el = el.parentElement;
+      }
+      if (!scroller) return 0;
+    }
+    const before = scroller.scrollTop;
+    scroller.scrollTop += dy;
+    return scroller.scrollTop - before;
   }
   const hudSpeed = hud.querySelector('#hudSpeed');
   const hudNitro = hud.querySelector('#hudNitro');
@@ -600,17 +640,35 @@
 
   chrome.storage.onChanged.addListener(async (changes, area) => {
     if (area !== 'local') return;
-    if (changes.carImage) setCarImage(changes.carImage.newValue);
+    if (changes.carImage || changes.carImageTop) {
+      painted = await chrome.storage.local.get(['carImage', 'carImageTop']);
+      setCarImage();
+    }
     if (!changes.settings) return;
     s = await CAR.load();
+    setCarImage();
     accentMenu();
     apply();
   });
 
   addEventListener('resize', () => { if (s.carMode === 'tab' && tabPos !== null && !tabRaf) park(tabPos); }, { passive: true });
 
-  // On the new tab, stay out of the way while the ignition cockpit is showing.
-  if (window.CarIgnition && (await window.CarIgnition)) {
+  // If the extension is updated or removed, this copy is orphaned: stop everything and take the car away.
+  const orphanCheck = setInterval(() => {
+    if (chrome.runtime?.id) return;
+    clearInterval(orphanCheck);
+    cancelAnimationFrame(roamRaf);
+    cancelAnimationFrame(tabRaf);
+    cancelAnimationFrame(gameRaf);
+    removeEventListener('keydown', onKey, true);
+    removeEventListener('keyup', onKey, true);
+    keeper.disconnect();
+    host.remove();
+  }, 2000);
+
+  // On the new tab, stay out of the way while the start screen is showing.
+  addEventListener('carmode:game', () => startGame());
+  if (window.CarStart && (await window.CarStart)) {
     await new Promise(r => addEventListener('carmode:drive', r, { once: true }));
     await sleep(600);
   }

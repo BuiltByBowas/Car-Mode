@@ -7,16 +7,26 @@ const OFFSCREEN_URL = 'offscreen/offscreen.html';
 chrome.runtime.onInstalled.addListener(async ({ reason }) => {
   // first install: open the user guide
   if (reason === 'install') chrome.tabs.create({ url: chrome.runtime.getURL('guide/guide.html') });
+  injectIntoOpenTabs();
   const { settings } = await chrome.storage.local.get('settings');
   await chrome.storage.local.set({ settings: { ...DEFAULTS, ...(settings || {}) } });
   await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
   syncAudio();
 });
 
-// With the ignition screen on, the engine only starts once the user turns the key (on the new tab).
+// Content scripts only load into pages opened after install/update; add the car to tabs already open.
+async function injectIntoOpenTabs() {
+  const tabs = await chrome.tabs.query({ url: ['http://*/*', 'https://*/*', 'file:///*'] });
+  await Promise.all(tabs.map(t => chrome.scripting.executeScript({
+    target: { tabId: t.id },
+    files: ['shared/config.js', 'shared/smoke.js', 'content/car.js']
+  }).catch(() => { /* pages Chrome protects (Web Store, PDF viewer, discarded tabs) */ })));
+}
+
+// With the start screen on, the engine sound plays when the user presses Start on the new tab.
 chrome.runtime.onStartup.addListener(async () => {
   const s = await load();
-  if (!s.ignition) playEvent('startup');
+  if (!s.startScreen) playEvent('startup');
 });
 
 // ---------- Offscreen audio page ----------
@@ -130,6 +140,11 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     })();
     return true;
   }
+  if (msg?.type === 'car-assets') {
+    Promise.all((msg.paths || []).map(async p => [p, await assetDataUrl(p).catch(() => null)]))
+      .then(pairs => sendResponse(Object.fromEntries(pairs)));
+    return true;
+  }
   if (msg?.type === 'car-action' && sender.tab) {
     carAction(msg.action, sender.tab, msg).then(sendResponse, err => sendResponse({ ok: false, error: String(err) }));
     return true;
@@ -142,6 +157,23 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     return true;
   }
 });
+
+// ---------- Assets for pages: data URLs, so sites that block chrome-extension:// loads still get the car ----------
+const assetCache = new Map();
+const MIME = { png: 'image/png', svg: 'image/svg+xml', jpg: 'image/jpeg' };
+
+async function assetDataUrl(path) {
+  if (!/^assets\/[\w./-]+$/.test(path) || path.includes('..')) throw new Error('Bad asset path');
+  if (!assetCache.has(path)) {
+    assetCache.set(path, (async () => {
+      const bytes = new Uint8Array(await (await fetch(chrome.runtime.getURL(path))).arrayBuffer());
+      let bin = '';
+      for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+      return `data:${MIME[path.split('.').pop()] || 'application/octet-stream'};base64,${btoa(bin)}`;
+    })());
+  }
+  return assetCache.get(path);
+}
 
 // ---------- Quick menu actions (from the page car) ----------
 async function carAction(action, tab, msg = {}) {

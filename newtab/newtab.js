@@ -76,10 +76,22 @@
     chrome.storage.session.set({ lastCar: item.file }).catch(() => {});
   }
 
-  // The ignition screen (if it shows) plays the entrance when the user drives off.
-  window.CarNewTab = { show: () => show(index, { entering: settings.entrance }), smoke: rollSmoke };
-  // ignition.js sets this promise synchronously while this script is awaiting storage
-  if (!(await window.CarIgnition)) show(index, { entering: settings.entrance });
+  // The start screen (if it shows) plays the entrance when the user starts the engine.
+  // Start screen: the wallpaper plays behind it; pressing Start reveals the page with the drive-in.
+  function enter() {
+    document.body.classList.remove('starting', 'entering');
+    void document.body.offsetWidth;
+    document.body.classList.toggle('entering', settings.entrance);
+    rollSmoke(1);
+  }
+  window.CarNewTab = { show: enter, smoke: rollSmoke };
+  // start.js sets this promise synchronously while this script is awaiting storage
+  if (await window.CarStart) {
+    document.body.classList.add('starting');
+    show(index);
+  } else {
+    show(index, { entering: settings.entrance });
+  }
 
   const step = async dir => {
     await show(index + dir);
@@ -88,7 +100,7 @@
   $('prev').addEventListener('click', () => step(-1));
   $('next').addEventListener('click', () => step(1));
   addEventListener('keydown', e => {
-    if (e.target.closest('input') || !$('ign').hidden) return;
+    if (e.target.closest('input') || !$('start').hidden) return;
     if (e.key === 'ArrowLeft') step(-1);
     if (e.key === 'ArrowRight') step(1);
   });

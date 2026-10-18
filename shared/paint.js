@@ -24,8 +24,9 @@
   }
 
   // ---------- Paint shop: recolor the car's body paint, keeping its shading and reflections ----------
-  // The cutout is a red Ferrari; "paint" = strongly red, saturated pixels.
-  async function paintCar(src, paint, width = 480) {
+  // Side view = red Ferrari: "paint" = strongly red, saturated pixels.
+  // Top view = silver S2000 (mask 'silver'): "paint" = bright, unsaturated body pixels (not glass or tyres).
+  async function paintCar(src, paint, width = 480, mask = 'red') {
     const img = new Image();
     img.src = src;
     await img.decode();
@@ -45,12 +46,14 @@
       const min = Math.min(r, gg, b);
       const sat = max ? (max - min) / max : 0;
       // red paint: red channel dominates, decent saturation
-      const redness = r > 50 && r > gg * 1.45 && r > b * 1.45 ? Math.min(1, (sat - 0.3) / 0.3) : 0;
+      const redness = mask === 'silver'
+        ? (max > 95 && sat < 0.22 ? Math.min(1, (max - 95) / 50) * (1 - sat / 0.22) : 0)
+        : (r > 50 && r > gg * 1.45 && r > b * 1.45 ? Math.min(1, (sat - 0.3) / 0.3) : 0);
       if (redness <= 0) continue;
       const x = ((i / 4) % width) / width;
       const target = mix(c1, c2, x);
-      // keep the original light: shade = brightness of this pixel relative to a mid-tone red
-      const shade = max / 175;
+      // keep the original light: shade = brightness of this pixel relative to a mid-tone of that paint
+      const shade = max / (mask === 'silver' ? 200 : 175);
       const out = target.map(v => v * shade + Math.max(0, shade - 1) * 90);
       for (let k = 0; k < 3; k++) px[i + k] = px[i + k] + (out[k] - px[i + k]) * redness;
     }

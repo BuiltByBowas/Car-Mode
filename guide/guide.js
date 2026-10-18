@@ -19,8 +19,8 @@
   $('menuGrid').innerHTML = MENU.map(([icon, label]) => `<div><span class="ic" style="--src:url('../assets/icons/${icon}.svg')"></span>${label}</div>`).join('');
 
   $('startEngine').addEventListener('click', async () => {
-    await chrome.storage.session.remove('ignited');
-    chrome.tabs.create({ url: chrome.runtime.getURL('newtab/newtab.html#ignition') });
+    await chrome.storage.session.remove('started');
+    chrome.tabs.create({ url: chrome.runtime.getURL('newtab/newtab.html#start') });
   });
   $('openControls').addEventListener('click', async () => {
     const win = await chrome.windows.getCurrent();

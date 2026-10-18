@@ -7,11 +7,11 @@
     topCar: true,         // the page car on/off
     carMode: 'roam',      // 'roam' = drives around the page edges | 'tab' = parks above the active tab
     carSpeed: 1,          // roam speed multiplier
+    carView: 'side',      // 'side' = Ferrari side view (stunt-loop look) | 'top' = S2000 seen from above
     carPaint: { type: 'original', c1: '#e10600', c2: '#ff7a00' }, // 'original' | 'solid' | 'gradient'
     accent: { c1: '#e10600', c2: '#ff7a00', gradient: false },   // Car Mode's own highlight color
     smoke: 'full',        // 'off' | 'light' | 'full' — tire smoke when the car moves / drifts
-    ignition: true,       // key + PIN + engine start the first time Chrome opens
-    pin: '1234',          // demo PIN; only a fun lock, not security
+    startScreen: true,    // "Let's Drive the Full Chrome" on the first new tab after Chrome starts
     sound: true,
     volume: 0.6,
     sounds: { startup: 'start', tabOpen: 'nitro', tabClose: 'drive-away', tabSwitch: 'none' },

@@ -94,3 +94,6 @@ body.entering .center { animation: rise .9s .3s cubic-bezier(.2, .8, .2, 1) both
   .center { padding-top: 40px; }
   .shortcuts { display: none; }
 }
+
+/* while the start screen is up, only the wallpaper shows behind it */
+body.starting .center, body.starting .bar { visibility: hidden; }
