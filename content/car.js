@@ -13,7 +13,7 @@
     'zoom-in', 'zoom-out', 'zoom-reset', 'maximize', 'arrow-bar-to-up', 'arrow-bar-to-down', 'picture-in-picture', 'headphones',
     'contrast', 'moon', 'link', 'language', 'printer', 'speakerphone', 'parking'];
   const SMOKE = [0, 1, 2, 3].map(i => `assets/fx/smoke-${i}.png`);
-  const PATHS = ['assets/car/ferrari-side-240.png', 'assets/car/s2000-top-240.png', ...SMOKE, ...ICONS.map(n => `assets/icons/${n}.svg`)];
+  const PATHS = ['assets/car/ferrari-side-240.png', ...SMOKE, ...ICONS.map(n => `assets/icons/${n}.svg`)];
   const assets = (await chrome.runtime.sendMessage({ type: 'car-assets', paths: PATHS }).catch(() => null)) || {};
   const url = p => assets[p] || chrome.runtime.getURL(p);
   CarSmoke.useSprites(SMOKE.map(url));
@@ -31,7 +31,6 @@
       :host { all: initial; }
       * { box-sizing: border-box; }
       canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; }
-      .car.top { width: 72px; }
       .car { position: fixed; left: 0; top: 0; width: 84px; height: auto; transform-origin: 0 0; pointer-events: auto; cursor: pointer;
         filter: drop-shadow(0 3px 3px rgba(0,0,0,.45)); will-change: transform; transition: opacity .35s; outline: none; }
       .car:focus-visible { filter: drop-shadow(0 0 0 #fff) drop-shadow(0 0 4px #e10600); }
@@ -71,17 +70,13 @@
     <div class="toast" role="status"></div>`;
   const car = shadow.querySelector('.car');
   // The paint shop stores the repainted car as a small image; use it when present.
-  // Side view = the Ferrari; top view = the S2000 seen from above. Both can be repainted.
-  const isTop = () => s.carView === 'top';
   let painted = {};
   const setCarImage = () => {
-    const top = isTop();
-    const src = (top ? painted.carImageTop : painted.carImage) || url(top ? 'assets/car/s2000-top-240.png' : 'assets/car/ferrari-side-240.png');
+    const src = painted.carImage || url('assets/car/ferrari-side-240.png');
     car.src = src;
-    car.classList.toggle('top', top);
     shadow.querySelector('.head img').src = src;
   };
-  chrome.storage.local.get(['carImage', 'carImageTop']).then(r => { painted = r; setCarImage(); });
+  chrome.storage.local.get('carImage').then(r => { painted = r; setCarImage(); });
   const menu = shadow.querySelector('.menu');
   const toastEl = shadow.querySelector('.toast');
   const smoke = new CarSmoke(shadow.querySelector('canvas'), { max: 200 });
@@ -112,7 +107,7 @@
     const { w, h } = size();
     car.style.transform = `translate(${x}px, ${y}px) rotate(${phi + yaw}rad) translate(${-w / 2}px, ${-h}px)`;
     const rx = -w / 2 + 3;
-    const ry = isTop() ? -h / 2 : -h * 0.3;
+    const ry = -h * 0.3;
     const a = phi + yaw;
     return { x: x + rx * Math.cos(a) - ry * Math.sin(a), y: y + rx * Math.sin(a) + ry * Math.cos(a), dx: Math.cos(a), dy: Math.sin(a) };
   }
@@ -372,8 +367,8 @@
     if (g.y > innerHeight - m) { g.y = innerHeight - m; g.vy = Math.min(0, g.vy); }
     if (g.y < m) { g.y = m; g.vy = Math.max(0, g.vy); }
 
-    // draw: rotate to the heading; the side view flips when facing left so its wheels stay down
-    const flip = !isTop() && Math.cos(g.h) < 0 ? ' scaleY(-1)' : '';
+    // draw: rotate to the heading; flip when facing left so the wheels stay down
+    const flip = Math.cos(g.h) < 0 ? ' scaleY(-1)' : '';
     car.style.transform = `translate(${g.x}px, ${g.y}px) rotate(${g.h}rad)${flip} translate(${-w / 2}px, ${-h / 2}px)`;
 
     // smoke: tire smoke when sliding, exhaust when boosting
@@ -641,8 +636,8 @@
 
   chrome.storage.onChanged.addListener(async (changes, area) => {
     if (area !== 'local') return;
-    if (changes.carImage || changes.carImageTop) {
-      painted = await chrome.storage.local.get(['carImage', 'carImageTop']);
+    if (changes.carImage) {
+      painted = await chrome.storage.local.get('carImage');
       setCarImage();
     }
     if (!changes.settings) return;

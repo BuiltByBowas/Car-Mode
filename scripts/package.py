@@ -1,7 +1,6 @@
-"""Build the downloadable ZIPs for a GitHub release.
+"""Build the downloadable ZIP for a GitHub release.
 
     dist/car-mode.zip        the extension (manifest.json at the zip root)
-    dist/car-mode-theme.zip  the separate Chrome theme
 
 Usage, from the repo root:  python scripts/package.py
 """
@@ -12,8 +11,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DIST = ROOT / 'dist'
-# Repo-only folders that Chrome doesn't need (the theme ships as its own zip).
-EXCLUDE = {'.git', '.gitignore', 'dist', 'docs', 'scripts', 'theme'}
+# Repo-only folders that Chrome doesn't need.
+EXCLUDE = {'.git', '.gitignore', 'dist', 'docs', 'scripts'}
 
 
 def zip_dir(src: Path, out: Path, skip=frozenset()):
@@ -29,7 +28,6 @@ def main():
     shutil.rmtree(DIST, ignore_errors=True)
     DIST.mkdir()
     zip_dir(ROOT, DIST / 'car-mode.zip', EXCLUDE)
-    zip_dir(ROOT / 'theme', DIST / 'car-mode-theme.zip')
     version = json.loads((ROOT / 'manifest.json').read_text(encoding='utf-8'))['version']
     for f in sorted(DIST.iterdir()):
         print(f'{f.name}  {f.stat().st_size / 1048576:.1f} MB')

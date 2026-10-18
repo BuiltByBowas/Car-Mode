@@ -41,7 +41,6 @@
   <div class="view" data-view="car">
     <section class="card">
       <h2><span class="i i-brush"></span>Paint shop</h2>
-      <div class="seg wide" id="carView"><button data-v="side">Side view · Ferrari</button><button data-v="top">Top view · S2000</button></div>
       <div class="showroom"><img id="paintPreview" alt="Your car with the selected paint"></div>
       <div class="seg wide" id="paintType"><button data-v="original">Original</button><button data-v="solid">Solid</button><button data-v="gradient">Gradient</button></div>
       <div class="swatches" id="paintSwatches"></div>
@@ -77,29 +76,8 @@
 
     <section class="card">
       <h2><span class="i i-wheel"></span>Themes</h2>
-      <p class="note">Pick a theme and Car Mode restyles <b>instantly</b>. Chrome doesn't let extensions recolor its own tab bar automatically, so to theme Chrome's window too, press <b>Also theme Chrome's tab bar</b> and load the folder once.</p>
-      <div class="mock" id="mock" aria-hidden="true">
-        <div class="mock-strip" id="mockStrip">
-          <span class="mock-tab" id="mockT1">YouTube</span>
-          <span class="mock-tab active" id="mockActive">Car Mode</span>
-          <span class="mock-tab" id="mockT2">News</span>
-        </div>
-        <div class="mock-bar" id="mockBar"><span class="mock-omni" id="mockOmni">carmode.app</span></div>
-      </div>
-      <div class="swatches" id="themeSwatches"></div>
-      <div class="seg wide" id="themeStyle"><button data-v="carbon">Carbon</button><button data-v="solid">Solid</button><button data-v="gradient">Gradient</button></div>
-      <div class="pickers three">
-        <label>Tab bar <input type="color" id="frame1"></label>
-        <label class="c2" id="frame2Wrap">Bar end <input type="color" id="frame2"></label>
-        <label>Active tab <input type="color" id="tabColor"></label>
-      </div>
-      <label class="row"><span>Theme name</span><input class="text" id="themeName" maxlength="24" value="My Car"></label>
-      <button class="btn" id="makeTheme"><span class="i i-download"></span>Also theme Chrome's tab bar</button>
-      <ol class="steps" id="themeSteps" hidden>
-        <li>Saved to <b>Downloads › Car Mode Theme › <span id="themeFolder"></span></b> <button class="link" id="showTheme">Show</button></li>
-        <li>Open <button class="link" id="openExt2">chrome://extensions</button> → <b>Load unpacked</b> → choose that folder.</li>
-        <li>Chrome swaps to the new theme right away. Loading another one replaces it.</li>
-      </ol>
+      <p class="note">Click a theme and Car Mode restyles instantly: new tab, start screen, controls and the car's menu.</p>
+      <div class="themes" id="themeSwatches"></div>
     </section>
   </div>
 

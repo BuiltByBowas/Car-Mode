@@ -12,8 +12,6 @@
 <p align="center">
   <a href="https://github.com/BuiltByBowas/Car-Mode/releases/latest/download/car-mode.zip"><b>⬇ Download Car Mode</b></a>
   &nbsp;·&nbsp;
-  <a href="https://github.com/BuiltByBowas/Car-Mode/releases/latest/download/car-mode-theme.zip">Chrome theme</a>
-  &nbsp;·&nbsp;
   <a href="#install">Install guide</a>
   &nbsp;·&nbsp;
   <a href="#features">Features</a>
@@ -51,10 +49,10 @@ No accounts. No servers. No tracking. Everything runs in your browser.
 | ⚡ **Quick menu** | Click the car for 26 actions: screenshot, reload, zoom, full screen, mini player, read aloud, dark page, high contrast, translate, copy link, print, mute, pin and more. |
 | 🎨 **Paint shop** | Repaint the car any color or gradient (Gulf, Sunset, Galaxy…), keeping its real reflections. |
 | 🌈 **Accent colors** | Any color or gradient for Car Mode's buttons, new tab and start screen. |
-| 🧩 **Themes** | Pick a theme (Gulf, Lambo, Midnight…) and Car Mode restyles instantly. Optionally theme Chrome's own tab bar too, with a live preview. Chrome only allows that through a one-time theme install. |
+| 🧩 **Themes** | One click on a theme (Gulf, Lambo, Midnight…) restyles Car Mode instantly. Nothing to download. |
 | 🔊 **Real sounds** | Engine start, a nitro burst for new tabs, a car driving away when you close a tab. Pick your own sound for every event. |
 | 📖 **User guide** | Opens on first install and explains everything with screenshots. It can be saved as a PDF. |
-| 👀 **Side or top view** | Pick the side-view Ferrari or a real top-down Honda S2000. In game mode the page scrolls with the car as you drive. |
+| 🎥 **Camera follow** | In game mode the page scrolls with the car as you drive down or up. |
 
 ## Screenshots
 
@@ -71,12 +69,9 @@ No accounts. No servers. No tracking. Everything runs in your browser.
     <td><img src="guide/img/game.jpg" alt="Game mode with speedometer and nitro bar"><br><sub><b>Game mode</b>: speedometer and nitro bar</sub></td>
     <td>
       <img src="guide/img/paint.jpg" alt="Paint shop" width="48%">
-      <img src="guide/img/colors.jpg" alt="Theme builder" width="48%"><br>
-      <sub><b>Paint shop</b> and <b>theme builder</b></sub>
+      <img src="guide/img/colors.jpg" alt="Themes" width="48%"><br>
+      <sub><b>Paint shop</b> and <b>themes</b></sub>
     </td>
-  </tr>
-  <tr>
-    <td colspan="2"><img src="guide/img/theme.png" alt="Chrome tab bar with the Car Mode theme"><br><sub><b>Chrome theme</b>: carbon tab bar, clearly highlighted active tab</sub></td>
   </tr>
 </table>
 
@@ -88,7 +83,6 @@ No accounts. No servers. No tracking. Everything runs in your browser.
 2. Open `chrome://extensions` and turn on **Developer mode** (top right).
 3. Click **Load unpacked** and select the unzipped folder (the one containing `manifest.json`).
 4. Open a new tab. If Chrome asks to keep the new page, choose **Keep it**. The user guide opens automatically.
-5. *Optional:* download **[car-mode-theme.zip](https://github.com/BuiltByBowas/Car-Mode/releases/latest/download/car-mode-theme.zip)**, unzip it, and **Load unpacked** that folder too, for the carbon Chrome theme.
 
 > Keep the folder after installing. Chrome runs unpacked extensions from it, so deleting it removes Car Mode.
 
@@ -98,7 +92,7 @@ No accounts. No servers. No tracking. Everything runs in your browser.
 git clone https://github.com/BuiltByBowas/Car-Mode.git
 ```
 
-Then **Load unpacked** the `Car-Mode` folder, and optionally `Car-Mode/theme`.
+Then **Load unpacked** the `Car-Mode` folder.
 
 ### Updating
 
@@ -137,7 +131,7 @@ Car Mode collects **no data**. It has no accounts, no analytics and no network r
 |---|---|
 | Read & change site data (`<all_urls>`) | Show the car and smoke on websites; take screenshots of the current page |
 | `storage` | Save your settings and paint locally |
-| `downloads` | Save screenshots and theme-builder themes to your Downloads folder |
+| `downloads` | Save screenshots to your Downloads folder |
 | `scripting` | Put the car on tabs that were already open when Car Mode was installed or updated |
 | `offscreen` | Play engine sounds in the background so they work across tabs |
 | `sidePanel` | The Car Mode controls |
@@ -155,11 +149,10 @@ background.js         engine sounds for browser events, quick-menu actions, tab 
 offscreen/            hidden audio page
 content/car.js        page car: roaming, follow-tab, game mode, smoke and quick menu
 newtab/               new tab (wallpapers, smoke) and start screen
-sidepanel/            control center (wallpaper, car & paint, colors & theme builder, sound, more)
+sidepanel/            control center (wallpaper, car & paint, colors & themes, sound, more)
 guide/                user guide (opens on install) and its screenshots
-shared/               settings, sound clips, audio player, smoke renderer, colors/paint/theme generator
-assets/               photos, videos, car cutouts (side + top view), recordings, smoke textures, icons
-theme/                the Chrome theme (a separate extension)
+shared/               settings, sound clips, audio player, smoke renderer, colors & paint
+assets/               photos, videos, car cutout, recordings, smoke textures, icons
 docs/                 README images
 scripts/package.py    builds the release ZIPs
 ```
@@ -167,7 +160,7 @@ scripts/package.py    builds the release ZIPs
 **Build a release:**
 
 ```bash
-python scripts/package.py   # → dist/car-mode.zip and dist/car-mode-theme.zip
+python scripts/package.py   # → dist/car-mode.zip
 ```
 
 ## Roadmap
@@ -180,7 +173,7 @@ python scripts/package.py   # → dist/car-mode.zip and dist/car-mode-theme.zip
 
 - **Photos, videos and engine recordings:** [Wikimedia Commons](https://commons.wikimedia.org/) contributors under free licenses (CC BY, CC BY-SA, CC0, public domain). Every file, author and license is listed in **[CREDITS.md](CREDITS.md)** and in the extension (**Controls › More › Credits**).
 - **Icons:** [Tabler Icons](https://tabler.io/icons) (MIT).
-- **Smoke and carbon textures:** made for this project.
+- **Smoke textures:** made for this project.
 - **Code:** [MIT License](LICENSE).
 
 <p align="center"><sub>Made with ❤️ for car people. Drive safe.</sub></p>

@@ -65,11 +65,7 @@
   $('carSpeed').addEventListener('change', async () => { s = await CAR.save({ carSpeed: Number($('carSpeed').value) }); });
 
   // ---------- Paint shop ----------
-  // Each view has its own car photo and paint mask; paint is applied to both so switching views keeps it.
-  const CARS = {
-    side: { src: '../assets/car/ferrari-side-480.png', mask: 'red', key: 'carImage' },
-    top: { src: '../assets/car/s2000-top-480.png', mask: 'silver', key: 'carImageTop' }
-  };
+  const CAR_SRC = '../assets/car/ferrari-side-480.png';
   const PAINTS = [
     ['Rosso', 'solid', '#d40000'], ['Giallo', 'solid', '#ffcc00'], ['Lambo green', 'solid', '#5ad400'], ['Racing green', 'solid', '#0b5d3b'],
     ['Electric blue', 'solid', '#1f5fff'], ['Nardo grey', 'solid', '#7d8186'], ['Pearl white', 'solid', '#e9e9ec'], ['Matte black', 'solid', '#1d1d20'],
@@ -80,27 +76,16 @@
 
   let paintTimer = 0;
   async function applyPaint(paint, save = true) {
-    const view = CARS[s.carView] || CARS.side;
-    const blob = await P.paintCar(view.src, paint, 480, view.mask);
+    const blob = await P.paintCar(CAR_SRC, paint, 480);
     $('paintPreview').src = URL.createObjectURL(blob);
     if (!save) return;
     clearTimeout(paintTimer);
     paintTimer = setTimeout(async () => {
       s = await CAR.save({ carPaint: paint });
-      if (paint.type === 'original') return chrome.storage.local.remove(['carImage', 'carImageTop']);
-      const out = {};
-      for (const c of Object.values(CARS)) out[c.key] = await P.blobToDataUrl(await P.paintCar(c.src, paint, 240, c.mask));
-      await chrome.storage.local.set(out);
+      if (paint.type === 'original') return chrome.storage.local.remove('carImage');
+      await chrome.storage.local.set({ carImage: await P.blobToDataUrl(await P.paintCar(CAR_SRC, paint, 240)) });
     }, 150);
   }
-
-  $('carView').addEventListener('click', async e => {
-    const b = e.target.closest('[data-v]');
-    if (!b) return;
-    s = await CAR.save({ carView: b.dataset.v });
-    render();
-    applyPaint(s.carPaint, false);
-  });
 
   $('paintSwatches').addEventListener('click', e => {
     const b = e.target.closest('[data-p]');
@@ -156,77 +141,28 @@
     $(id).addEventListener('change', async () => { s = await CAR.save({ accent: s.accent }); });
   }
 
-  // ---------- Chrome theme builder ----------
-  // [name, style, bar color, bar end, active tab, Car Mode accent (c1, c2 for gradients)]
+  // ---------- Themes: one click restyles Car Mode (accent colors) ----------
   const THEMES = [
-    ['Carbon red', 'carbon', '#141416', '#141416', '#3b1214', '#e10600'],
-    ['Midnight', 'solid', '#0b1020', '#0b1020', '#27324d', '#3b82f6'],
-    ['Gulf', 'gradient', '#6ec6e6', '#ff8200', '#f4f7fa', '#6ec6e6', '#ff8200'],
-    ['Racing green', 'carbon', '#0b3d2a', '#0b3d2a', '#e8f2ec', '#22c55e'],
-    ['Lambo', 'gradient', '#ff7a00', '#ffcc00', '#1b1b1d', '#ff7a00', '#ffcc00'],
-    ['Pearl', 'solid', '#d9dbe0', '#d9dbe0', '#ffffff', '#64748b'],
-    ['Sunset', 'gradient', '#3b0a45', '#ff3d6e', '#2a0f33', '#ff3d6e', '#ffb800'],
-    ['Nardo', 'carbon', '#4b4e53', '#4b4e53', '#d6d8dc', '#9ca3af']
+    ['Carbon red', '#e10600'], ['Midnight', '#3b82f6'], ['Gulf', '#6ec6e6', '#ff8200'], ['Racing green', '#22c55e'],
+    ['Lambo', '#ff7a00', '#ffcc00'], ['Pearl', '#64748b'], ['Sunset', '#ff3d6e', '#ffb800'], ['Nardo', '#9ca3af']
   ];
-  let theme = { style: 'carbon', c1: '#141416', c2: '#141416', tab: '#3a3b42' };
-  try { theme = { ...theme, ...JSON.parse(localStorage.getItem('carmode-theme') || '{}') }; } catch (e) { /* ignore */ }
-  $('themeSwatches').innerHTML = THEMES.map(([n, st, a, b, t, x1, x2]) =>
-    `<button class="sw theme" data-t="${st}|${a}|${b}|${t}" data-accent="${x1}|${x2 || ''}" style="background:${st === 'gradient' ? `linear-gradient(90deg, ${a}, ${b})` : a}; box-shadow: inset -14px 0 0 ${t}, inset 0 0 0 1px rgba(255,255,255,.15)">${n}</button>`).join('');
-
-  async function renderTheme() {
-    try { localStorage.setItem('carmode-theme', JSON.stringify(theme)); } catch (e) { /* ignore */ }
-    [...$('themeStyle').children].forEach(b => b.classList.toggle('on', b.dataset.v === theme.style));
-    $('frame1').value = theme.c1;
-    $('frame2').value = theme.c2;
-    $('tabColor').value = theme.tab;
-    $('frame2Wrap').hidden = theme.style !== 'gradient';
-    const col = P.themeColors(theme);
-    const hex = rgb => P.rgbToHex(rgb);
-    const frame = await P.themeFrame(theme, '../assets/fx/carbon.png');
-    $('mockStrip').style.backgroundImage = `url(${URL.createObjectURL(frame)})`;
-    $('mockActive').style.background = hex(col.toolbar);
-    $('mockActive').style.color = hex(col.tab_text);
-    for (const id of ['mockT1', 'mockT2']) $(id).style.color = hex(col.tab_background_text);
-    $('mockBar').style.background = hex(col.toolbar);
-    $('mockOmni').style.background = hex(col.omnibox_background);
-    $('mockOmni').style.color = hex(col.omnibox_text);
-  }
-
-  $('themeSwatches').addEventListener('click', e => {
-    const b = e.target.closest('[data-t]');
+  $('themeSwatches').innerHTML = THEMES.map(([n, a, b]) =>
+    `<button class="theme-card" data-a="${a}|${b || ''}" style="--t:${b ? `linear-gradient(135deg, ${a}, ${b})` : a}"><i></i>${n}</button>`).join('');
+  $('themeSwatches').addEventListener('click', async e => {
+    const b = e.target.closest('[data-a]');
     if (!b) return;
-    const [style, c1, c2, tab] = b.dataset.t.split('|');
-    theme = { style, c1, c2, tab };
-    $('themeName').value = b.textContent.trim();
-    renderTheme();
-    // Applies instantly to everything Car Mode draws (new tab, start screen, panel, car menu).
-    const [a1, a2] = b.dataset.accent.split('|');
-    CAR.save({ accent: { c1: a1, c2: a2 || s.accent.c2, gradient: !!a2 } }).then(v => { s = v; render(); });
-    toast(`${b.textContent.trim()} applied to Car Mode`);
+    const [c1, c2] = b.dataset.a.split('|');
+    s = await CAR.save({ accent: { c1, c2: c2 || s.accent.c2, gradient: !!c2 } });
+    render();
+    toast(`${b.textContent.trim()} theme on`);
   });
-  $('themeStyle').addEventListener('click', e => {
-    const b = e.target.closest('[data-v]');
-    if (b) { theme.style = b.dataset.v; renderTheme(); }
-  });
-  for (const [id, key] of [['frame1', 'c1'], ['frame2', 'c2'], ['tabColor', 'tab']]) {
-    $(id).addEventListener('input', () => { theme[key] = $(id).value; renderTheme(); });
+  function renderThemes() {
+    const a = s.accent;
+    document.querySelectorAll('.theme-card').forEach(b => {
+      const [c1, c2] = b.dataset.a.split('|');
+      b.classList.toggle('on', c1 === a.c1 && (c2 ? a.gradient && c2 === a.c2 : !a.gradient));
+    });
   }
-
-  let lastDownload = null;
-  $('makeTheme').addEventListener('click', async () => {
-    const name = ($('themeName').value.trim() || 'My Car').slice(0, 24);
-    const folder = name.replace(/[^\w -]+/g, '').trim().replace(/\s+/g, '-') || 'My-Car';
-    const manifest = P.themeManifest(name, P.themeColors(theme));
-    const frame = await P.themeFrame(theme, '../assets/fx/carbon.png');
-    const base = `Car Mode Theme/${folder}`;
-    const opts = { conflictAction: 'overwrite', saveAs: false };
-    await chrome.downloads.download({ ...opts, url: URL.createObjectURL(frame), filename: `${base}/images/frame.png` });
-    lastDownload = await chrome.downloads.download({ ...opts, url: URL.createObjectURL(new Blob([JSON.stringify(manifest, null, 2)], { type: 'application/json' })), filename: `${base}/manifest.json` });
-    $('themeFolder').textContent = folder;
-    $('themeSteps').hidden = false;
-    toast('Theme created');
-  });
-  $('showTheme').addEventListener('click', () => lastDownload ? chrome.downloads.show(lastDownload) : chrome.downloads.showDefaultFolder());
 
   // ---------- Start screen ----------
   $('replay').addEventListener('click', async () => {
@@ -265,7 +201,7 @@
   $('idle').addEventListener('change', async () => { s = await CAR.save({ idle: Number($('idle').value) }); });
 
   // ---------- Chrome ----------
-  for (const id of ['openExt', 'openExt2']) $(id).addEventListener('click', () => chrome.tabs.create({ url: 'chrome://extensions' }));
+  $('openExt').addEventListener('click', () => chrome.tabs.create({ url: 'chrome://extensions' }));
   $('openGuide').addEventListener('click', () => chrome.tabs.create({ url: chrome.runtime.getURL('guide/guide.html') }));
   $('openAppearance').addEventListener('click', () => chrome.tabs.create({ url: 'chrome://settings/appearance' }));
 
@@ -285,16 +221,15 @@
     $('carSpeed').value = s.carSpeed;
     [...$('smoke').children].forEach(b => b.classList.toggle('on', b.dataset.v === s.smoke));
     [...$('carMode').children].forEach(b => b.classList.toggle('on', b.dataset.v === s.carMode));
-    [...$('carView').children].forEach(b => b.classList.toggle('on', b.dataset.v === s.carView));
     $('accentGradient').checked = !!s.accent.gradient;
     $('accent1').value = s.accent.c1;
     $('accent2').value = s.accent.c2;
     $('accent2Wrap').hidden = !s.accent.gradient;
     renderPaintControls(s.carPaint);
+    renderThemes();
   }
   render();
   applyPaint(s.carPaint, false);
-  renderTheme();
 
   chrome.storage.onChanged.addListener(async (changes, area) => {
     if (area !== 'local' || !changes.settings) return;

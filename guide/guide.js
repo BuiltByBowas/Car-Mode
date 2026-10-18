@@ -27,7 +27,6 @@
     chrome.sidePanel.open({ windowId: win.id });
   });
   $('savePdf').addEventListener('click', () => print());
-  $('openExt').addEventListener('click', () => chrome.tabs.create({ url: 'chrome://extensions' }));
 
   // Highlight the section you're reading in the table of contents.
   const links = [...document.querySelectorAll('.toc a')];
