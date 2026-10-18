@@ -1,0 +1,87 @@
+{
+  "manifest_version": 3,
+  "name": "Car Mode Theme",
+  "version": "2.1.0",
+  "description": "Carbon fiber tab bar with a clearly highlighted active tab, to match Car Mode.",
+  "theme": {
+    "images": {
+      "theme_frame": "images/frame.png",
+      "theme_frame_inactive": "images/frame.png"
+    },
+    "colors": {
+      "frame": [
+        16,
+        16,
+        18
+      ],
+      "frame_inactive": [
+        24,
+        24,
+        27
+      ],
+      "toolbar": [
+        62,
+        63,
+        70
+      ],
+      "tab_text": [
+        255,
+        255,
+        255
+      ],
+      "tab_background_text": [
+        150,
+        150,
+        158
+      ],
+      "tab_background_text_inactive": [
+        115,
+        115,
+        122
+      ],
+      "bookmark_text": [
+        235,
+        235,
+        238
+      ],
+      "toolbar_text": [
+        245,
+        245,
+        247
+      ],
+      "toolbar_button_icon": [
+        235,
+        235,
+        238
+      ],
+      "omnibox_background": [
+        38,
+        38,
+        43
+      ],
+      "omnibox_text": [
+        245,
+        245,
+        247
+      ],
+      "ntp_background": [
+        11,
+        11,
+        12
+      ],
+      "ntp_text": [
+        244,
+        244,
+        245
+      ],
+      "ntp_link": [
+        244,
+        244,
+        245
+      ]
+    },
+    "properties": {
+      "ntp_background_alignment": "center"
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "manifest_version": 3,
+  "name": "Car Mode",
+  "short_name": "Car Mode",
+  "version": "2.4.0",
+  "description": "Real sports cars and drift videos on every new tab, a smoky car that drives around every page with a quick-action menu, key-and-PIN ignition, real engine sounds.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "Car Mode controls",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "chrome_url_overrides": {
+    "newtab": "newtab/newtab.html"
+  },
+  "side_panel": {
+    "default_path": "sidepanel/panel.html"
+  },
+  "permissions": [
+    "storage",
+    "topSites",
+    "search",
+    "favicon",
+    "offscreen",
+    "sidePanel",
+    "downloads"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*",
+        "file:///*"
+      ],
+      "js": [
+        "shared/config.js",
+        "shared/smoke.js",
+        "content/car.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/car/*",
+        "assets/fx/*",
+        "assets/icons/*"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*",
+        "file:///*"
+      ]
+    }
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "commands": {
+    "car-menu": {
+      "suggested_key": {
+        "default": "Alt+Shift+C"
+      },
+      "description": "Open the car quick menu on this page"
+    },
+    "car-drive": {
+      "suggested_key": {
+        "default": "Alt+Shift+D"
+      },
+      "description": "Game mode: drive the car on this page (WASD, Space = nitro)"
+    }
+  }
+}

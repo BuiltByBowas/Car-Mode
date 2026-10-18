@@ -1,0 +1,66 @@
+/* Car Mode base styles: neutral graphite + white, one accent. */
+:root {
+  --bg: #121214;
+  --surface: #1c1d20;
+  --surface-2: #26272b;
+  --line: rgba(255, 255, 255, .12);
+  --text: #f4f4f5;
+  --muted: #a1a1aa;
+  --accent: #e10600;
+  --glass: rgba(16, 16, 18, .42);
+  --radius: 14px;
+  --font: "Segoe UI Variable Display", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; font: 14px/1.45 var(--font); color: var(--text); background: var(--bg); -webkit-font-smoothing: antialiased; }
+button, input, select { font: inherit; color: inherit; }
+a { color: inherit; }
+
+/* Tabler icons (MIT) as masks so they take the current text color */
+.i { display: inline-block; flex: none; width: 20px; height: 20px; background: currentColor; -webkit-mask: var(--src) center / contain no-repeat; mask: var(--src) center / contain no-repeat; }
+.i-car { --src: url(../assets/icons/car.svg); }
+.i-wheel { --src: url(../assets/icons/steering-wheel.svg); }
+.i-search { --src: url(../assets/icons/search.svg); }
+.i-prev { --src: url(../assets/icons/chevron-left.svg); }
+.i-next { --src: url(../assets/icons/chevron-right.svg); }
+.i-volume { --src: url(../assets/icons/volume.svg); }
+.i-mute { --src: url(../assets/icons/volume-3.svg); }
+.i-photo { --src: url(../assets/icons/photo.svg); }
+.i-settings { --src: url(../assets/icons/adjustments-horizontal.svg); }
+.i-play { --src: url(../assets/icons/player-play.svg); }
+.i-shuffle { --src: url(../assets/icons/arrows-shuffle.svg); }
+.i-check { --src: url(../assets/icons/check.svg); }
+.i-info { --src: url(../assets/icons/info-circle.svg); }
+.i-engine { --src: url(../assets/icons/engine.svg); }
+.i-lock { --src: url(../assets/icons/lock.svg); }
+.i-key { --src: url(../assets/icons/key.svg); }
+.i-back { --src: url(../assets/icons/backspace.svg); }
+.i-movie { --src: url(../assets/icons/movie.svg); }
+.i-power { --src: url(../assets/icons/power.svg); }
+.i-palette { --src: url(../assets/icons/palette.svg); }
+.i-brush { --src: url(../assets/icons/brush.svg); }
+.i-download { --src: url(../assets/icons/download.svg); }
+
+.icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--glass);
+  backdrop-filter: blur(14px);
+  cursor: pointer;
+  transition: background .2s, border-color .2s, transform .15s;
+}
+.icon-btn:hover { background: rgba(255, 255, 255, .16); border-color: rgba(255, 255, 255, .3); }
+.icon-btn:active { transform: scale(.94); }
+.icon-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

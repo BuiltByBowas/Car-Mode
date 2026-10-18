@@ -1,0 +1,22 @@
+[
+  {
+    "file": "drift-smoke.webm",
+    "name": "Drift smoke (red S13)",
+    "title": "Drifting.webm",
+    "author": "High Resolution Database",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Drifting.webm",
+    "note": "Short segment re-encoded at 1280x720, no audio"
+  },
+  {
+    "file": "night-drift.webm",
+    "name": "Night drift (FPV drone)",
+    "title": "Cars drifting around a race track at twilight and night as viewed from FPV drone.webm",
+    "author": "anotherview",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Cars_drifting_around_a_race_track_at_twilight_and_night_as_viewed_from_FPV_drone.webm",
+    "note": "Short segment re-encoded at 1280x720, no audio"
+  }
+]

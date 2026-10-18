@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Car Mode — User guide</title>
+  <link rel="icon" href="../icons/icon32.png">
+  <link rel="stylesheet" href="../shared/ui.css">
+  <link rel="stylesheet" href="guide.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <img class="hero-car" id="heroCar" src="../assets/car/ferrari-side-480.png" alt="">
+      <p class="eyebrow">User guide</p>
+      <h1>Welcome to Car Mode</h1>
+      <p class="lead">Real sports cars, drift videos and engine sounds in Chrome, plus a car you can drive on any website.</p>
+      <div class="actions">
+        <button class="btn primary" id="startEngine"><span class="i i-key"></span>Start the engine</button>
+        <button class="btn" id="openControls"><span class="i i-settings"></span>Open controls</button>
+        <button class="btn" id="savePdf"><span class="i i-download"></span>Save as PDF</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" aria-label="Contents">
+      <a href="#setup">Quick setup</a>
+      <a href="#ignition">Start your engine</a>
+      <a href="#newtab">New tab</a>
+      <a href="#pagecar">The page car</a>
+      <a href="#game">Game mode</a>
+      <a href="#menu">Quick menu</a>
+      <a href="#paint">Paint &amp; colors</a>
+      <a href="#theme">Chrome theme</a>
+      <a href="#sounds">Sounds</a>
+      <a href="#keys">Shortcuts</a>
+      <a href="#help">Help &amp; privacy</a>
+    </nav>
+
+    <main>
+      <section id="setup">
+        <h2><span class="n">1</span>Quick setup</h2>
+        <ol class="steps">
+          <li><b>Keep the new tab.</b> If Chrome asks "Change back to Google?", choose <b>Keep it</b>.</li>
+          <li><b>Pin the car icon.</b> Click the puzzle piece in Chrome's toolbar and pin <b>Car Mode</b>. The red car opens the controls.</li>
+          <li><b>Load the theme (optional).</b> In <code>chrome://extensions</code> click <b>Load unpacked</b> and choose the <code>theme</code> folder inside Car Mode, for a carbon tab bar with a clearly highlighted active tab.
+            <button class="link" id="openExt">Open extensions page</button></li>
+          <li><b>Side panel on the left (optional).</b> Chrome Settings → Appearance → <b>Side panel position</b>.</li>
+        </ol>
+      </section>
+
+      <section id="ignition">
+        <h2><span class="n">2</span>Start your engine</h2>
+        <div class="split">
+          <div>
+            <p>The first new tab after Chrome starts opens a cockpit.</p>
+            <ol class="steps">
+              <li>Your pointer is a <b>key</b>. Click <b>ENGINE START</b> to insert it.</li>
+              <li>Enter your PIN. The demo PIN is <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd>. You can type it or tap it, and change it under <b>Controls › More</b>.</li>
+              <li>The real engine starts and the rev counter sweeps. <b>Move the mouse</b> to turn the wheel and <b>hold the mouse button</b> to rev.</li>
+              <li>Press <b>Drive</b> (or <kbd>Enter</kbd>) to roll into your new tab.</li>
+            </ol>
+            <p class="tip">The PIN is just for fun, not security. Turn the ignition screen off in <b>Controls › More</b>, or replay it with <b>Start the engine again</b>.</p>
+          </div>
+          <figure><img src="img/ignition.jpg" alt="Ignition screen with PIN pad" loading="lazy"><figcaption>The cockpit: key slot, PIN pad, tachometer and steering wheel.</figcaption></figure>
+        </div>
+      </section>
+
+      <section id="newtab">
+        <h2><span class="n">3</span>New tab</h2>
+        <figure class="wide"><img src="img/newtab.jpg" alt="New tab with drift video wallpaper" loading="lazy"><figcaption>Drift video wallpaper with rolling tire smoke.</figcaption></figure>
+        <ul class="list">
+          <li><b>Wallpapers:</b> 2 real drift videos and 13 sports-car photos. Switch with <kbd>←</kbd> <kbd>→</kbd> or the arrow buttons, or pick one under <b>Controls › Wallpaper</b>. Turn on <b>Random car</b> to get a different one on every tab.</li>
+          <li><b>Smoke:</b> during drifts, smoke rolls across the whole page. Set it to Off, Light or Full.</li>
+          <li><b>Search &amp; shortcuts:</b> search the web or type a URL; your most-visited sites sit underneath.</li>
+          <li>The photographer or filmmaker is credited at the bottom left of every wallpaper.</li>
+        </ul>
+      </section>
+
+      <section id="pagecar">
+        <h2><span class="n">4</span>The page car</h2>
+        <div class="split">
+          <figure><img src="img/roam.jpg" alt="The car driving around a web page" loading="lazy"><figcaption>The car laps the page and drifts through the corners.</figcaption></figure>
+          <div>
+            <p>A real Ferrari drives on every website, YouTube included. Choose how it drives under <b>Controls › Car</b>:</p>
+            <ul class="list">
+              <li><b>Around page:</b> it laps the inside edges like a stunt track and drifts through the corners. All tabs share one clock, so it stays in place when you switch.</li>
+              <li><b>Follow tab:</b> it parks above your active tab and drives forward or reverses when you switch tabs.</li>
+              <li><b>Hover</b> over the car to stop it, and <b>click</b> it for the quick menu.</li>
+              <li>It hides automatically when a video goes full screen.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="game">
+        <h2><span class="n">5</span>Game mode — drive it yourself</h2>
+        <p>Take the wheel on any website: click the car → <b>Drive it</b>, or press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>D</kbd>.</p>
+        <div class="split">
+          <table class="controls">
+            <tr><td><kbd>W</kbd> or <kbd>↑</kbd></td><td>Accelerate</td></tr>
+            <tr><td><kbd>S</kbd> or <kbd>↓</kbd></td><td>Brake, then reverse</td></tr>
+            <tr><td><kbd>A</kbd> <kbd>D</kbd> or <kbd>←</kbd> <kbd>→</kbd></td><td>Steer</td></tr>
+            <tr><td><kbd>Space</kbd> (with <kbd>W</kbd>)</td><td>Nitro boost: much faster, until the blue bar runs out (it refills)</td></tr>
+            <tr><td><kbd>Shift</kbd></td><td>Handbrake: slide into a drift</td></tr>
+            <tr><td><kbd>H</kbd></td><td>Horn</td></tr>
+            <tr><td><kbd>Esc</kbd></td><td>Stop driving</td></tr>
+          </table>
+          <figure><img src="img/game.jpg" alt="Game mode with speedometer and nitro bar" loading="lazy"><figcaption>Speed and nitro show bottom left.</figcaption></figure>
+        </div>
+        <ul class="list">
+          <li>The car can drive <b>anywhere on the page</b>. Drive into the bottom or top edge and the <b>page scrolls</b> with you.</li>
+          <li>While you drive, the game uses those keys, so <kbd>Space</kbd> won't pause YouTube. Typing in a search box still works normally.</li>
+          <li>Press <kbd>Esc</kbd> and every key goes back to normal.</li>
+        </ul>
+      </section>
+
+      <section id="menu">
+        <h2><span class="n">6</span>Quick menu</h2>
+        <div class="split">
+          <div>
+            <p>Click the car, or press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>. Every button works with <kbd>Tab</kbd> and <kbd>Enter</kbd>, and <kbd>Esc</kbd> closes the menu.</p>
+            <div class="menu-grid" id="menuGrid"></div>
+          </div>
+          <figure><img src="img/menu.jpg" alt="Car quick menu" loading="lazy"><figcaption>Screenshots go to <b>Downloads › Car Mode</b>.</figcaption></figure>
+        </div>
+      </section>
+
+      <section id="paint">
+        <h2><span class="n">7</span>Paint &amp; colors</h2>
+        <div class="split">
+          <figure><img src="img/paint.jpg" alt="Paint shop" loading="lazy"><figcaption>Paint shop: solid or gradient, with the real reflections kept.</figcaption></figure>
+          <div>
+            <ul class="list">
+              <li><b>Paint shop</b> (<b>Controls › Car</b>): 12 presets including Gulf, Sunset and Galaxy gradients, or any color you like. The new paint appears on every page right away.</li>
+              <li><b>Accent color</b> (<b>Controls › Colors</b>): any color or gradient for Car Mode's buttons, switches, new tab, ignition screen and steering wheel.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="theme">
+        <h2><span class="n">8</span>Chrome theme</h2>
+        <figure class="wide"><img src="img/theme.png" alt="Chrome tab bar with the Car Mode theme" loading="lazy"><figcaption>Carbon tab bar; the active tab is clearly lighter.</figcaption></figure>
+        <div class="split">
+          <div>
+            <p>Chrome only lets an installed theme recolor its own window. Car Mode includes one and can build more:</p>
+            <ol class="steps">
+              <li><b>Controls › Colors › Chrome theme builder</b>: pick Carbon, Solid or Gradient for the tab bar, and a color for the <b>active tab</b>. The preview updates live.</li>
+              <li>Press <b>Create theme</b>. It saves to <b>Downloads › Car Mode Theme › your name</b>.</li>
+              <li>Go to <code>chrome://extensions</code> → <b>Load unpacked</b> → choose that folder. Loading another theme replaces it.</li>
+            </ol>
+          </div>
+          <figure><img src="img/colors.jpg" alt="Theme builder" loading="lazy"><figcaption>Theme builder with live preview.</figcaption></figure>
+        </div>
+      </section>
+
+      <section id="sounds">
+        <h2><span class="n">9</span>Sounds</h2>
+        <p>All sounds are real recordings. Pick a sound per event under <b>Controls › Sound</b>, preview it with ▶, or turn sound off with the speaker button.</p>
+        <table class="controls">
+          <tr><td>Chrome starts</td><td>Engine start (plays when you turn the key, if the ignition screen is on)</td></tr>
+          <tr><td>New tab</td><td>Nitro burst, at a lower volume</td></tr>
+          <tr><td>Close tab</td><td>Car driving away</td></tr>
+          <tr><td>Switch tab</td><td>Silent by default; try Quick rev or Horn</td></tr>
+          <tr><td>Idle engine</td><td>An optional engine murmur in the background</td></tr>
+        </table>
+      </section>
+
+      <section id="keys">
+        <h2><span class="n">10</span>Shortcuts</h2>
+        <table class="controls">
+          <tr><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd></td><td>Open the car's quick menu</td></tr>
+          <tr><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>D</kbd></td><td>Start / stop game mode</td></tr>
+          <tr><td><kbd>←</kbd> <kbd>→</kbd> on the new tab</td><td>Previous / next wallpaper</td></tr>
+          <tr><td><kbd>Esc</kbd></td><td>Close the menu or stop driving</td></tr>
+        </table>
+        <p class="tip">You can change shortcuts at <code>chrome://extensions/shortcuts</code>.</p>
+      </section>
+
+      <section id="help">
+        <h2><span class="n">11</span>Help &amp; privacy</h2>
+        <ul class="list">
+          <li><b>No car on a page?</b> Chrome doesn't allow extensions on <code>chrome://</code> pages or the Chrome Web Store. Tabs that were already open before you installed Car Mode need a reload.</li>
+          <li><b>Screenshot didn't save?</b> Some pages (like Chrome's own pages) block screenshots.</li>
+          <li><b>No sound?</b> Check the speaker button in the controls and Chrome's site sound settings.</li>
+          <li><b>Privacy:</b> Car Mode has no accounts, no servers and no tracking. Your settings stay in your browser.</li>
+          <li><b>Credits:</b> photos, videos and recordings come from Wikimedia Commons under free licenses, and icons are Tabler Icons (MIT). The full list is under <b>Controls › More › Credits</b>.</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <footer class="foot">Car Mode · MIT licensed · Have fun, drive safe.</footer>
+
+  <script src="../shared/config.js"></script>
+  <script src="../shared/paint.js"></script>
+  <script src="guide.js"></script>
+</body>
+</html>

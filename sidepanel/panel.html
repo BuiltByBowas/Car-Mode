@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Car Mode</title>
+  <link rel="stylesheet" href="../shared/ui.css">
+  <link rel="stylesheet" href="panel.css">
+</head>
+<body>
+  <header class="head">
+    <span class="logo"><span class="i i-car"></span></span>
+    <div>
+      <h1>Car Mode</h1>
+      <p>Controls</p>
+    </div>
+    <label class="master" title="All sound on/off"><input type="checkbox" id="sound" aria-label="Sound on or off"><span class="i i-volume"></span></label>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-view="wall"><span class="i i-photo"></span>Wallpaper</button>
+    <button role="tab" data-view="car"><span class="i i-car"></span>Car</button>
+    <button role="tab" data-view="colors"><span class="i i-palette"></span>Colors</button>
+    <button role="tab" data-view="sound"><span class="i i-engine"></span>Sound</button>
+    <button role="tab" data-view="more"><span class="i i-settings"></span>More</button>
+  </nav>
+
+  <!-- WALLPAPER -->
+  <div class="view" data-view="wall">
+    <section class="card">
+      <div class="cars" id="cars"></div>
+      <label class="row switch"><span>Random car on every new tab</span><input type="checkbox" id="shuffle"></label>
+      <label class="row switch"><span>Drive-in effect on new tab</span><input type="checkbox" id="entrance"></label>
+      <div class="row"><span>Tire smoke</span>
+        <div class="seg" id="smoke"><button data-v="off">Off</button><button data-v="light">Light</button><button data-v="full">Full</button></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- CAR -->
+  <div class="view" data-view="car">
+    <section class="card">
+      <h2><span class="i i-brush"></span>Paint shop</h2>
+      <div class="showroom"><img id="paintPreview" alt="Your car with the selected paint"></div>
+      <div class="seg wide" id="paintType"><button data-v="original">Original</button><button data-v="solid">Solid</button><button data-v="gradient">Gradient</button></div>
+      <div class="swatches" id="paintSwatches"></div>
+      <div class="pickers" id="paintPickers">
+        <label>Color 1 <input type="color" id="paint1"></label>
+        <label class="c2">Color 2 <input type="color" id="paint2"></label>
+      </div>
+    </section>
+    <section class="card">
+      <h2><span class="i i-car"></span>Page car</h2>
+      <label class="row switch"><span>Car on every page</span><input type="checkbox" id="topCar"></label>
+      <div class="row"><span>Driving</span>
+        <div class="seg" id="carMode"><button data-v="roam">Around page</button><button data-v="tab">Follow tab</button></div>
+      </div>
+      <label class="row"><span>Speed</span><input type="range" id="carSpeed" min="0.4" max="2.5" step="0.1"></label>
+      <p class="note">Click the car (or press <b>Alt+Shift+C</b>) for the quick menu: screenshot, reload, zoom, mini player, read aloud, dark page, translate and more.</p>
+      <p class="note"><b>Game mode:</b> menu → <b>Drive it</b> (or <b>Alt+Shift+D</b>). Drive with W A S D, Space for nitro, Shift to drift, and Esc to stop.</p>
+    </section>
+  </div>
+
+  <!-- COLORS -->
+  <div class="view" data-view="colors">
+    <section class="card">
+      <h2><span class="i i-palette"></span>Accent color</h2>
+      <p class="note">Highlights in Car Mode: buttons, switches, the new tab and the ignition screen.</p>
+      <div class="swatches" id="accentSwatches"></div>
+      <label class="row switch"><span>Gradient</span><input type="checkbox" id="accentGradient"></label>
+      <div class="pickers">
+        <label>Color 1 <input type="color" id="accent1"></label>
+        <label class="c2" id="accent2Wrap">Color 2 <input type="color" id="accent2"></label>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2><span class="i i-wheel"></span>Chrome theme builder</h2>
+      <p class="note">Colors for Chrome's own tab bar and toolbar. The <b>active tab</b> uses the tab color, so pick one that stands out from the tab bar.</p>
+      <div class="mock" id="mock" aria-hidden="true">
+        <div class="mock-strip" id="mockStrip">
+          <span class="mock-tab" id="mockT1">YouTube</span>
+          <span class="mock-tab active" id="mockActive">Car Mode</span>
+          <span class="mock-tab" id="mockT2">News</span>
+        </div>
+        <div class="mock-bar" id="mockBar"><span class="mock-omni" id="mockOmni">carmode.app</span></div>
+      </div>
+      <div class="swatches" id="themeSwatches"></div>
+      <div class="seg wide" id="themeStyle"><button data-v="carbon">Carbon</button><button data-v="solid">Solid</button><button data-v="gradient">Gradient</button></div>
+      <div class="pickers three">
+        <label>Tab bar <input type="color" id="frame1"></label>
+        <label class="c2" id="frame2Wrap">Bar end <input type="color" id="frame2"></label>
+        <label>Active tab <input type="color" id="tabColor"></label>
+      </div>
+      <label class="row"><span>Theme name</span><input class="text" id="themeName" maxlength="24" value="My Car"></label>
+      <button class="btn primary" id="makeTheme"><span class="i i-download"></span>Create theme</button>
+      <ol class="steps" id="themeSteps" hidden>
+        <li>Saved to <b>Downloads › Car Mode Theme › <span id="themeFolder"></span></b> <button class="link" id="showTheme">Show</button></li>
+        <li>Open <button class="link" id="openExt2">chrome://extensions</button> → <b>Load unpacked</b> → choose that folder.</li>
+        <li>Chrome swaps to the new theme right away. Loading another one replaces it.</li>
+      </ol>
+    </section>
+  </div>
+
+  <!-- SOUND -->
+  <div class="view" data-view="sound">
+    <section class="card">
+      <label class="row"><span>Volume</span><input type="range" id="volume" min="0" max="1" step="0.05"></label>
+      <div id="events"></div>
+      <label class="row"><span>Idle engine in background</span><input type="range" id="idle" min="0" max="1" step="0.05"></label>
+    </section>
+  </div>
+
+  <!-- MORE -->
+  <div class="view" data-view="more">
+    <section class="card">
+      <h2><span class="i i-key"></span>Ignition</h2>
+      <label class="row switch"><span>Key &amp; PIN when Chrome starts</span><input type="checkbox" id="ignition"></label>
+      <form class="row" id="pinForm">
+        <span>PIN</span>
+        <span class="pin-edit"><input id="pin" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="off" aria-label="4-digit PIN"><button class="small" type="submit">Save</button></span>
+      </form>
+      <p class="note">A fun lock for the start screen, not real security. Demo PIN is 1234.</p>
+      <button class="btn" id="replay"><span class="i i-power"></span>Start the engine again</button>
+    </section>
+    <section class="card">
+      <h2><span class="i i-info"></span>Help</h2>
+      <button class="btn primary" id="openGuide">Open the user guide</button>
+    </section>
+    <section class="card">
+      <h2><span class="i i-wheel"></span>Chrome</h2>
+      <button class="btn" id="openExt">Open extensions page</button>
+      <p class="note">Side panel on the left: Chrome Settings → Appearance → <b>Side panel position</b>.</p>
+      <button class="btn" id="openAppearance">Open appearance settings</button>
+    </section>
+    <details class="card credits">
+      <summary><span class="i i-info"></span>Credits &amp; licenses</summary>
+      <div id="credits"></div>
+    </details>
+  </div>
+
+  <script src="../shared/config.js"></script>
+  <script src="../shared/player.js"></script>
+  <script src="../shared/paint.js"></script>
+  <script src="panel.js"></script>
+</body>
+</html>

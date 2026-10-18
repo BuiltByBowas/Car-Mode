@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>New Tab</title>
+  <link rel="stylesheet" href="../shared/ui.css">
+  <link rel="stylesheet" href="newtab.css">
+  <link rel="stylesheet" href="ignition.css">
+</head>
+<body>
+  <div class="stage" id="stage" aria-hidden="true">
+    <div class="photo" id="photo"></div>
+    <video class="video" id="video" muted loop playsinline preload="auto"></video>
+  </div>
+  <div class="shade" aria-hidden="true"></div>
+  <canvas class="smoke" id="smoke" aria-hidden="true"></canvas>
+
+  <main class="center">
+    <div class="clock" id="clock">--:--</div>
+    <div class="date" id="date"></div>
+    <form class="search" id="search" role="search">
+      <span class="i i-search" aria-hidden="true"></span>
+      <input id="q" type="text" placeholder="Search or type a URL" aria-label="Search or type a URL" autocomplete="off">
+    </form>
+    <nav class="shortcuts" id="shortcuts" aria-label="Most visited"></nav>
+  </main>
+
+  <footer class="bar">
+    <div class="caption">
+      <div class="car-name"><span class="tag" id="tag">PHOTO</span><span id="carName"></span></div>
+      <div class="credit" id="credit"></div>
+    </div>
+    <div class="controls">
+      <button class="icon-btn" id="prev" title="Previous (←)" aria-label="Previous wallpaper"><span class="i i-prev"></span></button>
+      <button class="icon-btn" id="next" title="Next (→)" aria-label="Next wallpaper"><span class="i i-next"></span></button>
+      <button class="icon-btn" id="sound" title="Sound on/off" aria-label="Sound on or off"><span class="i i-volume"></span></button>
+      <button class="icon-btn" id="settings" title="Car Mode controls" aria-label="Open Car Mode controls"><span class="i i-settings"></span></button>
+    </div>
+  </footer>
+
+  <!-- Ignition: shown on the first new tab after Chrome starts -->
+  <section class="ign" id="ign" hidden aria-label="Ignition">
+    <div class="ign-bg" id="ignBg"></div>
+    <div class="ign-vignette"></div>
+
+    <div class="cluster" id="cluster">
+      <svg class="tach" viewBox="0 0 200 200" aria-hidden="true">
+        <defs>
+          <linearGradient id="face" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#17181c"/><stop offset="1" stop-color="#0a0a0c"/></linearGradient>
+        </defs>
+        <circle cx="100" cy="100" r="96" fill="url(#face)" stroke="#2c2d33" stroke-width="3"/>
+        <g id="ticks"></g>
+        <path id="redzone" fill="none" stroke="#e10600" stroke-width="7"/>
+        <g id="needle" class="needle"><path d="M98 100 L100 26 L102 100 Z" fill="#ff3b30"/><circle cx="100" cy="100" r="9" fill="#222" stroke="#555"/></g>
+        <text x="100" y="150" text-anchor="middle" class="tach-unit">×1000 rpm</text>
+      </svg>
+      <div class="readout">
+        <div class="gear" id="gear">P</div>
+        <div class="status" id="status">Insert the key</div>
+      </div>
+    </div>
+
+    <div class="wheel-wrap"><svg class="wheel" id="wheel" viewBox="0 0 400 400" aria-hidden="true">
+      <defs>
+        <radialGradient id="rim" cx="50%" cy="38%" r="60%"><stop offset="0" stop-color="#3a3b40"/><stop offset=".7" stop-color="#1b1c20"/><stop offset="1" stop-color="#0d0d0f"/></radialGradient>
+        <linearGradient id="spoke" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#34353b"/><stop offset="1" stop-color="#17181b"/></linearGradient>
+        <pattern id="carbon" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <rect width="8" height="8" fill="#141416"/><rect width="4" height="4" fill="#232327"/><rect x="4" y="4" width="4" height="4" fill="#232327"/>
+        </pattern>
+      </defs>
+      <rect x="18" y="170" width="26" height="70" rx="6" fill="#2a2b30" stroke="#444"/>
+      <rect x="356" y="170" width="26" height="70" rx="6" fill="#2a2b30" stroke="#444"/>
+      <circle cx="200" cy="200" r="172" fill="none" stroke="url(#rim)" stroke-width="40"/>
+      <circle cx="200" cy="200" r="172" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="2" transform="translate(0 -14)"/>
+      <circle cx="200" cy="200" r="156" fill="none" stroke="#555" stroke-width="1.2" stroke-dasharray="3 6"/>
+      <circle cx="200" cy="200" r="188" fill="none" stroke="#555" stroke-width="1.2" stroke-dasharray="3 6"/>
+      <path d="M180 28 A172 172 0 0 1 220 28" fill="none" style="stroke: var(--accent, #e10600)" stroke-width="40"/>
+      <path d="M60 222 C100 214 130 218 150 214 L150 186 C130 182 100 186 58 178 Z" fill="url(#spoke)"/>
+      <path d="M340 222 C300 214 270 218 250 214 L250 186 C270 182 300 186 342 178 Z" fill="url(#spoke)"/>
+      <path d="M170 250 L230 250 L222 362 L178 362 Z" fill="url(#spoke)"/>
+      <circle cx="200" cy="205" r="62" fill="url(#carbon)" stroke="#3b3c42" stroke-width="3"/>
+      <circle cx="200" cy="205" r="26" style="fill: var(--accent, #e10600)"/>
+      <path transform="translate(182 187) scale(1.5)" d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0 M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0 M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg></div>
+
+    <button class="slot" id="slot" aria-label="Insert key and start engine">
+      <span class="slot-ring"><span class="slot-key"></span></span>
+      <span class="slot-label" id="slotLabel">ENGINE<br>START</span>
+    </button>
+
+    <div class="pinpad" id="pinpad" hidden>
+      <div class="pin-title"><span class="i i-lock"></span>Enter PIN</div>
+      <div class="pin-dots" id="pinDots"><i></i><i></i><i></i><i></i></div>
+      <div class="pin-hint" id="pinHint"></div>
+      <div class="keys" id="keys"></div>
+    </div>
+
+    <button class="drive" id="drive" hidden>Drive <span class="i i-next"></span></button>
+    <button class="skip" id="skip">Skip</button>
+    <div class="ign-credit" id="ignCredit"></div>
+  </section>
+
+  <script src="../shared/config.js"></script>
+  <script src="../shared/player.js"></script>
+  <script src="../shared/smoke.js"></script>
+  <script src="../shared/paint.js"></script>
+  <script src="newtab.js"></script>
+  <script src="ignition.js"></script>
+  <script src="../content/car.js"></script>
+</body>
+</html>
