@@ -167,7 +167,7 @@
     $('frame2Wrap').hidden = theme.style !== 'gradient';
     const col = P.themeColors(theme);
     const hex = rgb => P.rgbToHex(rgb);
-    const frame = await P.themeFrame(theme, '../theme/images/frame.png');
+    const frame = await P.themeFrame(theme, '../assets/fx/carbon.png');
     $('mockStrip').style.backgroundImage = `url(${URL.createObjectURL(frame)})`;
     $('mockActive').style.background = hex(col.toolbar);
     $('mockActive').style.color = hex(col.tab_text);
@@ -198,7 +198,7 @@
     const name = ($('themeName').value.trim() || 'My Car').slice(0, 24);
     const folder = name.replace(/[^\w -]+/g, '').trim().replace(/\s+/g, '-') || 'My-Car';
     const manifest = P.themeManifest(name, P.themeColors(theme));
-    const frame = await P.themeFrame(theme, '../theme/images/frame.png');
+    const frame = await P.themeFrame(theme, '../assets/fx/carbon.png');
     const base = `Car Mode Theme/${folder}`;
     const opts = { conflictAction: 'overwrite', saveAs: false };
     await chrome.downloads.download({ ...opts, url: URL.createObjectURL(frame), filename: `${base}/images/frame.png` });

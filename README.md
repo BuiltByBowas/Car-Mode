@@ -1,42 +1,184 @@
-# Car Mode
+<p align="center">
+  <img src="docs/banner.png" alt="Car Mode — real sports cars, drift videos and engine sounds for Chrome" width="100%">
+</p>
 
-A car theme for Chrome, built from real photos, real videos and real engine recordings.
+<p align="center">
+  <a href="https://github.com/BuiltByBowas/Car-Mode/releases/latest"><img alt="Version" src="https://img.shields.io/github/v/release/BuiltByBowas/Car-Mode?label=version&color=e10600"></a>
+  <img alt="Manifest V3" src="https://img.shields.io/badge/Chrome-Manifest%20V3-4285F4?logo=googlechrome&logoColor=white">
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-22c55e"></a>
+  <img alt="No tracking" src="https://img.shields.io/badge/tracking-none-111111">
+</p>
 
-- **Ignition:** the first new tab after Chrome starts is a cockpit. Your pointer becomes a key. Click the start button to insert it, enter the PIN (demo **1234**), and the engine starts with a real recording while the tachometer sweeps. Moving the mouse turns the steering wheel, holding the mouse button revs the engine, and **Drive** takes you to the new tab.
-- **New tab:** a drift video (red S13 in tire smoke, or a night FPV chase) or one of 13 sports-car photos. Smoke rolls across the whole page when the car drifts.
-- **Page car:** a real Ferrari (cut out from a photo) drives around every page, YouTube included. It runs along the inside edges like a stunt track: along the bottom, up the right side, upside-down across the top and down the left, drifting through the corners in tire smoke. Hovering over it stops it. All tabs share one clock, so it keeps its place when you switch tabs. You can also switch it to **Follow tab** mode, where it parks above your active tab and drives forward or reverses when you switch.
-- **Game mode:** take the wheel on any website. Click the car → **Drive it** (or **Alt+Shift+D**), then **W A S D / arrows** to drive, **Space** for nitro, **Shift** to drift, **H** for the horn and **Esc** to stop. The car can go anywhere on the page, and driving into the top or bottom edge scrolls the page. A speedometer and nitro bar show bottom left.
-- **User guide:** opens on first install, and anytime from the quick menu or **Controls › More**. It explains every feature with screenshots and can be saved as a PDF.
-- **Quick menu:** click the car (or press **Alt+Shift+C**) for screenshot (saved to `Downloads/Car Mode`), reload, back/forward, new/duplicate/close tab, mute, pin, zoom in/out/reset, full screen, scroll to top/bottom, mini player (picture-in-picture for videos), read aloud, high contrast, dark page, copy link, translate, print, horn, and park the car. Everything is keyboard-accessible, and Esc closes the menu.
-- **Paint shop:** paint the car any color, or a two-color gradient (Gulf, Sunset, Galaxy and more, or your own). The real reflections and shading are kept.
-- **Accent colors:** any color or gradient for Car Mode's buttons, switches, new tab and ignition screen.
-- **Chrome theme builder:** pick a carbon, solid or gradient tab bar plus an active-tab color, with a live preview. **Create theme** saves a ready theme folder to `Downloads/Car Mode Theme/`, which you load once from `chrome://extensions` (Chrome only lets themes change its own window).
-- **Sounds:** engine start, a quieter nitro burst on new tab, a car driving away on close, and anything you like on tab switch. Every event is selectable.
-- **Controls:** click the red car icon in the toolbar. The side panel has everything: wallpaper, top car, smoke level, ignition and PIN, sounds and volume.
-- **Default Chrome theme:** a carbon-fiber tab bar with a clearly lighter active tab (the `theme/` folder).
+<p align="center">
+  <a href="https://github.com/BuiltByBowas/Car-Mode/releases/latest/download/car-mode.zip"><b>⬇ Download Car Mode</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://github.com/BuiltByBowas/Car-Mode/releases/latest/download/car-mode-theme.zip">Chrome theme</a>
+  &nbsp;·&nbsp;
+  <a href="#install">Install guide</a>
+  &nbsp;·&nbsp;
+  <a href="#features">Features</a>
+</p>
 
-No accounts, no servers, no tracking. Code: MIT. Media and icons: free licenses, credited in [CREDITS.md](CREDITS.md).
+---
+
+**Car Mode** turns Chrome into a garage. Real sports-car photos and drift videos fill your new tab, a real Ferrari drives around every website trailing tire smoke, and real engine recordings play when you start Chrome, open tabs and close them. When you want to play, take the wheel: drive the car anywhere on any page with **W A S D**, hit **Space** for nitro and **Shift** to drift.
+
+No accounts. No servers. No tracking. Everything runs in your browser.
+
+<p align="center">
+  <img src="docs/demo-game.gif" alt="Game mode: driving the car on a web page with nitro and drift smoke" width="720">
+  <br><sub>Game mode: drive on any website. Drifting leaves tire smoke, and the page scrolls when you drive into the edge.</sub>
+</p>
+
+## Contents
+
+- [Features](#features)
+- [Screenshots](#screenshots)
+- [Install](#install)
+- [Controls & shortcuts](#controls--shortcuts)
+- [Permissions & privacy](#permissions--privacy)
+- [For developers](#for-developers)
+- [Credits & license](#credits--license)
+
+## Features
+
+| | |
+|---|---|
+| 🔑 **Ignition** | The first tab after Chrome starts is a Porsche cockpit. Your pointer becomes a key: insert it, enter your PIN (demo `1234`), and the real engine fires while the tachometer sweeps. The mouse steers the wheel. |
+| 🎬 **Live new tab** | Drift videos with smoke rolling across the page, or 13 sports-car photos (Lamborghini, Ferrari, McLaren, Porsche, Audi), with a clock, search and your top sites. |
+| 🏎️ **Page car** | A real Ferrari laps every website's edges like a stunt track and drifts through the corners. Or set it to follow your active tab. |
+| 🎮 **Game mode** | Drive the car anywhere on any page: WASD, Space for nitro, Shift to drift. Includes a speedometer and nitro bar, and the page scrolls when you drive into the edge. |
+| ⚡ **Quick menu** | Click the car for 26 actions: screenshot, reload, zoom, full screen, mini player, read aloud, dark page, high contrast, translate, copy link, print, mute, pin and more. |
+| 🎨 **Paint shop** | Repaint the car any color or gradient (Gulf, Sunset, Galaxy…), keeping its real reflections. |
+| 🌈 **Accent colors** | Any color or gradient for Car Mode's buttons, new tab, ignition screen and steering wheel. |
+| 🧩 **Chrome theme + builder** | A carbon tab bar with a clearly highlighted active tab, plus a builder that makes your own theme with a live preview. |
+| 🔊 **Real sounds** | Engine start, a nitro burst for new tabs, a car driving away when you close a tab. Pick your own sound for every event. |
+| 📖 **User guide** | Opens on first install and explains everything with screenshots. It can be saved as a PDF. |
+
+## Screenshots
+
+<table>
+  <tr>
+    <td width="50%"><img src="guide/img/ignition.jpg" alt="Ignition cockpit with PIN pad"><br><sub><b>Ignition</b>: key, PIN and engine start</sub></td>
+    <td width="50%"><img src="guide/img/newtab.jpg" alt="New tab with drift video"><br><sub><b>New tab</b>: drift video wallpaper with smoke</sub></td>
+  </tr>
+  <tr>
+    <td><img src="guide/img/roam.jpg" alt="The car driving around a video page"><br><sub><b>Page car</b>: laps any website, YouTube included</sub></td>
+    <td><img src="guide/img/menu.jpg" alt="Quick menu"><br><sub><b>Quick menu</b>: 26 actions, fully keyboard-accessible</sub></td>
+  </tr>
+  <tr>
+    <td><img src="guide/img/game.jpg" alt="Game mode with speedometer and nitro bar"><br><sub><b>Game mode</b>: speedometer and nitro bar</sub></td>
+    <td>
+      <img src="guide/img/paint.jpg" alt="Paint shop" width="48%">
+      <img src="guide/img/colors.jpg" alt="Theme builder" width="48%"><br>
+      <sub><b>Paint shop</b> and <b>theme builder</b></sub>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2"><img src="guide/img/theme.png" alt="Chrome tab bar with the Car Mode theme"><br><sub><b>Chrome theme</b>: carbon tab bar, clearly highlighted active tab</sub></td>
+  </tr>
+</table>
 
 ## Install
 
-1. Open `chrome://extensions` and turn on **Developer mode**.
-2. Click **Load unpacked** and pick this folder.
-3. Click **Load unpacked** again and pick the `theme` folder inside it.
-4. Open a new tab (choose **Keep it** if Chrome asks).
+### Option A — Download (recommended)
 
-The page car appears on regular websites and hides when a video goes full screen. Chrome doesn't allow extensions on `chrome://` pages or the Web Store.
+1. Download **[car-mode.zip](https://github.com/BuiltByBowas/Car-Mode/releases/latest/download/car-mode.zip)** and unzip it to a folder you'll keep, for example `Documents\Car Mode`.
+2. Open `chrome://extensions` and turn on **Developer mode** (top right).
+3. Click **Load unpacked** and select the unzipped folder (the one containing `manifest.json`).
+4. Open a new tab. If Chrome asks to keep the new page, choose **Keep it**. The user guide opens automatically.
+5. *Optional:* download **[car-mode-theme.zip](https://github.com/BuiltByBowas/Car-Mode/releases/latest/download/car-mode-theme.zip)**, unzip it, and **Load unpacked** that folder too, for the carbon Chrome theme.
 
-## Files
+> Keep the folder after installing. Chrome runs unpacked extensions from it, so deleting it removes Car Mode.
+
+### Option B — From source
+
+```bash
+git clone https://github.com/BuiltByBowas/Car-Mode.git
+```
+
+Then **Load unpacked** the `Car-Mode` folder, and optionally `Car-Mode/theme`.
+
+### Updating
+
+Download the new ZIP and replace the folder's contents (or `git pull`), then click ↻ on Car Mode in `chrome://extensions`.
+
+## Controls & shortcuts
+
+**Game mode**: click the car → **Drive it**, or press `Alt+Shift+D`.
+
+| Key | Action |
+|---|---|
+| `W` / `↑` | Accelerate |
+| `S` / `↓` | Brake, then reverse |
+| `A` `D` / `←` `→` | Steer |
+| `Space` (with `W`) | Nitro boost (the blue bar refills) |
+| `Shift` | Handbrake drift |
+| `H` | Horn |
+| `Esc` | Stop driving (all keys go back to normal) |
+
+**Everywhere**
+
+| Shortcut | Action |
+|---|---|
+| `Alt+Shift+C` | Open the car's quick menu |
+| `Alt+Shift+D` | Start / stop game mode |
+| `←` `→` on the new tab | Previous / next wallpaper |
+| Click the toolbar icon | Car Mode controls (side panel) |
+
+You can change shortcuts at `chrome://extensions/shortcuts`.
+
+## Permissions & privacy
+
+Car Mode collects **no data**. It has no accounts, no analytics and no network requests of its own. Settings live in your browser's local storage.
+
+| Permission | Why |
+|---|---|
+| Read & change site data (`<all_urls>`) | Show the car and smoke on websites; take screenshots of the current page |
+| `storage` | Save your settings, paint and PIN locally |
+| `downloads` | Save screenshots and theme-builder themes to your Downloads folder |
+| `offscreen` | Play engine sounds in the background so they work across tabs |
+| `sidePanel` | The Car Mode controls |
+| `topSites`, `favicon`, `search` | Most-visited shortcuts and the search box on the new tab |
+
+The car doesn't run on `chrome://` pages or the Chrome Web Store, because Chrome blocks extensions there.
+
+## For developers
+
+No build step. It's plain JavaScript, HTML and CSS with no dependencies.
 
 ```
-manifest.json         extension manifest
-background.js         engine sounds for browser events, top-car tab positions
-offscreen/            hidden page that plays audio
-content/car.js        the page car, smoke and quick menu
-newtab/               new tab (wallpaper, smoke) and ignition screen
-sidepanel/            control center
-guide/                user guide (opens on install) + screenshots
-shared/               settings, sound clips, player, smoke renderer, base styles
-assets/               photos, videos, cockpit, car cutout, sounds, smoke textures, Tabler icons
-theme/                separate Chrome theme (load it on its own)
+manifest.json         Manifest V3
+background.js         engine sounds for browser events, quick-menu actions, tab positions
+offscreen/            hidden audio page
+content/car.js        page car: roaming, follow-tab, game mode, smoke and quick menu
+newtab/               new tab (wallpapers, smoke) and ignition screen
+sidepanel/            control center (wallpaper, car & paint, colors & theme builder, sound, more)
+guide/                user guide (opens on install) and its screenshots
+shared/               settings, sound clips, audio player, smoke renderer, colors/paint/theme generator
+assets/               photos, videos, cockpit, car cutout, recordings, smoke textures, icons
+theme/                the Chrome theme (a separate extension)
+docs/                 README images
+scripts/package.py    builds the release ZIPs
 ```
+
+**Build a release:**
+
+```bash
+python scripts/package.py   # → dist/car-mode.zip and dist/car-mode-theme.zip
+```
+
+## Roadmap
+
+- 🔧 Garage: repair and customize a car, then set it as your wallpaper
+- 🧑‍🔧 A mechanic companion with car-care tips
+- 🔎 Car and bike search
+
+## Credits & license
+
+- **Photos, videos and engine recordings:** [Wikimedia Commons](https://commons.wikimedia.org/) contributors under free licenses (CC BY, CC BY-SA, CC0, public domain). Every file, author and license is listed in **[CREDITS.md](CREDITS.md)** and in the extension (**Controls › More › Credits**).
+- **Icons:** [Tabler Icons](https://tabler.io/icons) (MIT).
+- **Smoke textures, carbon texture, steering wheel and gauges:** made for this project.
+- **Code:** [MIT License](LICENSE).
+
+<p align="center"><sub>Made with ❤️ for car people. Drive safe.</sub></p>

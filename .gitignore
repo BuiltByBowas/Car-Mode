@@ -10,3 +10,9 @@ desktop.ini
 *.zip
 *.crx
 *.pem
+
+# Release builds (scripts/package.ps1)
+dist/
+
+# Chrome writes this into an unpacked theme folder
+Cached Theme.pak
