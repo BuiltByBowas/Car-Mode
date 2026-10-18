@@ -51,7 +51,7 @@ No accounts. No servers. No tracking. Everything runs in your browser.
 | ⚡ **Quick menu** | Click the car for 26 actions: screenshot, reload, zoom, full screen, mini player, read aloud, dark page, high contrast, translate, copy link, print, mute, pin and more. |
 | 🎨 **Paint shop** | Repaint the car any color or gradient (Gulf, Sunset, Galaxy…), keeping its real reflections. |
 | 🌈 **Accent colors** | Any color or gradient for Car Mode's buttons, new tab and start screen. |
-| 🧩 **Chrome theme + builder** | A carbon tab bar with a clearly highlighted active tab, plus a builder that makes your own theme with a live preview. |
+| 🧩 **Themes** | Pick a theme (Gulf, Lambo, Midnight…) and Car Mode restyles instantly. Optionally theme Chrome's own tab bar too, with a live preview. Chrome only allows that through a one-time theme install. |
 | 🔊 **Real sounds** | Engine start, a nitro burst for new tabs, a car driving away when you close a tab. Pick your own sound for every event. |
 | 📖 **User guide** | Opens on first install and explains everything with screenshots. It can be saved as a PDF. |
 | 👀 **Side or top view** | Pick the side-view Ferrari or a real top-down Honda S2000. In game mode the page scrolls with the car as you drive. |

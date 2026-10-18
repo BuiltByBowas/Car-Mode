@@ -157,20 +157,21 @@
   }
 
   // ---------- Chrome theme builder ----------
+  // [name, style, bar color, bar end, active tab, Car Mode accent (c1, c2 for gradients)]
   const THEMES = [
-    ['Carbon red', 'carbon', '#141416', '#141416', '#3b1214'],
-    ['Midnight', 'solid', '#0b1020', '#0b1020', '#27324d'],
-    ['Gulf', 'gradient', '#6ec6e6', '#ff8200', '#f4f7fa'],
-    ['Racing green', 'carbon', '#0b3d2a', '#0b3d2a', '#e8f2ec'],
-    ['Lambo', 'gradient', '#ff7a00', '#ffcc00', '#1b1b1d'],
-    ['Pearl', 'solid', '#d9dbe0', '#d9dbe0', '#ffffff'],
-    ['Sunset', 'gradient', '#3b0a45', '#ff3d6e', '#2a0f33'],
-    ['Nardo', 'carbon', '#4b4e53', '#4b4e53', '#d6d8dc']
+    ['Carbon red', 'carbon', '#141416', '#141416', '#3b1214', '#e10600'],
+    ['Midnight', 'solid', '#0b1020', '#0b1020', '#27324d', '#3b82f6'],
+    ['Gulf', 'gradient', '#6ec6e6', '#ff8200', '#f4f7fa', '#6ec6e6', '#ff8200'],
+    ['Racing green', 'carbon', '#0b3d2a', '#0b3d2a', '#e8f2ec', '#22c55e'],
+    ['Lambo', 'gradient', '#ff7a00', '#ffcc00', '#1b1b1d', '#ff7a00', '#ffcc00'],
+    ['Pearl', 'solid', '#d9dbe0', '#d9dbe0', '#ffffff', '#64748b'],
+    ['Sunset', 'gradient', '#3b0a45', '#ff3d6e', '#2a0f33', '#ff3d6e', '#ffb800'],
+    ['Nardo', 'carbon', '#4b4e53', '#4b4e53', '#d6d8dc', '#9ca3af']
   ];
   let theme = { style: 'carbon', c1: '#141416', c2: '#141416', tab: '#3a3b42' };
   try { theme = { ...theme, ...JSON.parse(localStorage.getItem('carmode-theme') || '{}') }; } catch (e) { /* ignore */ }
-  $('themeSwatches').innerHTML = THEMES.map(([n, st, a, b, t]) =>
-    `<button class="sw theme" data-t="${st}|${a}|${b}|${t}" style="background:${st === 'gradient' ? `linear-gradient(90deg, ${a}, ${b})` : a}; box-shadow: inset -14px 0 0 ${t}, inset 0 0 0 1px rgba(255,255,255,.15)">${n}</button>`).join('');
+  $('themeSwatches').innerHTML = THEMES.map(([n, st, a, b, t, x1, x2]) =>
+    `<button class="sw theme" data-t="${st}|${a}|${b}|${t}" data-accent="${x1}|${x2 || ''}" style="background:${st === 'gradient' ? `linear-gradient(90deg, ${a}, ${b})` : a}; box-shadow: inset -14px 0 0 ${t}, inset 0 0 0 1px rgba(255,255,255,.15)">${n}</button>`).join('');
 
   async function renderTheme() {
     try { localStorage.setItem('carmode-theme', JSON.stringify(theme)); } catch (e) { /* ignore */ }
@@ -198,6 +199,10 @@
     theme = { style, c1, c2, tab };
     $('themeName').value = b.textContent.trim();
     renderTheme();
+    // Applies instantly to everything Car Mode draws (new tab, start screen, panel, car menu).
+    const [a1, a2] = b.dataset.accent.split('|');
+    CAR.save({ accent: { c1: a1, c2: a2 || s.accent.c2, gradient: !!a2 } }).then(v => { s = v; render(); });
+    toast(`${b.textContent.trim()} applied to Car Mode`);
   });
   $('themeStyle').addEventListener('click', e => {
     const b = e.target.closest('[data-v]');

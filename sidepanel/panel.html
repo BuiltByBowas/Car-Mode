@@ -76,8 +76,8 @@
     </section>
 
     <section class="card">
-      <h2><span class="i i-wheel"></span>Chrome theme builder</h2>
-      <p class="note">Colors for Chrome's own tab bar and toolbar. The <b>active tab</b> uses the tab color, so pick one that stands out from the tab bar.</p>
+      <h2><span class="i i-wheel"></span>Themes</h2>
+      <p class="note">Pick a theme and Car Mode restyles <b>instantly</b>. Chrome doesn't let extensions recolor its own tab bar automatically, so to theme Chrome's window too, press <b>Also theme Chrome's tab bar</b> and load the folder once.</p>
       <div class="mock" id="mock" aria-hidden="true">
         <div class="mock-strip" id="mockStrip">
           <span class="mock-tab" id="mockT1">YouTube</span>
@@ -94,7 +94,7 @@
         <label>Active tab <input type="color" id="tabColor"></label>
       </div>
       <label class="row"><span>Theme name</span><input class="text" id="themeName" maxlength="24" value="My Car"></label>
-      <button class="btn primary" id="makeTheme"><span class="i i-download"></span>Create theme</button>
+      <button class="btn" id="makeTheme"><span class="i i-download"></span>Also theme Chrome's tab bar</button>
       <ol class="steps" id="themeSteps" hidden>
         <li>Saved to <b>Downloads › Car Mode Theme › <span id="themeFolder"></span></b> <button class="link" id="showTheme">Show</button></li>
         <li>Open <button class="link" id="openExt2">chrome://extensions</button> → <b>Load unpacked</b> → choose that folder.</li>

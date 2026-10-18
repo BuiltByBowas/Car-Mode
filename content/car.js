@@ -604,8 +604,9 @@
   accentMenu();
 
   // =================== Wiring ===================
+  let waitingForStart = false;
   function apply() {
-    if (gaming) return; // game mode owns the car until Esc
+    if (gaming || waitingForStart) return; // game mode owns the car until Esc; the start screen keeps it parked
     cancelAnimationFrame(roamRaf);
     if (!s.topCar) {
       cancelAnimationFrame(tabRaf);
@@ -669,8 +670,10 @@
   // On the new tab, stay out of the way while the start screen is showing.
   addEventListener('carmode:game', () => startGame());
   if (window.CarStart && (await window.CarStart)) {
+    waitingForStart = true;
     await new Promise(r => addEventListener('carmode:drive', r, { once: true }));
     await sleep(600);
+    waitingForStart = false;
   }
 
   // Tab mode: play a move that happened before this script was ready, or just park.
